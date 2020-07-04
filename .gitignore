@@ -1,3 +1,12 @@
+# PyCharm project settings
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/EmpathyGame.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
