@@ -1,0 +1,17 @@
+{
+    "name": "cpdm-integration",
+    "version": "0.1.0",
+    "description": "",
+    "dependencies": {
+    },
+    "devDependencies": {
+      "@ui5/cli": "^2.2.6",
+      "local-web-server": "^3.0.7"
+    },
+    "scripts": {
+      "start": "ui5 serve",
+      "build": "ui5 build -a --clean-dest",
+          "build-self-contained": "ui5 build self-contained -a --clean-dest"
+    }
+  }
+  
