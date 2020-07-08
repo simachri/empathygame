@@ -14,7 +14,7 @@ sap.ui.define([
 			this.getView().setModel(new JSONModel({
 				isMobile: Device.browser.mobile,
 				webSocketText: "",
-				welcomeMessage: "Not yet Connected.",
+				welcomeMessage: "Not yet Connected."
 			}));	
 
 		},
@@ -55,18 +55,7 @@ sap.ui.define([
 				websocket.send("WebSocket rocks");
 			};
 			websocket.onmessage = function(evt) {
-				that.getView().getModel().setProperty("/webSocketText", evt.data);
-				websocket.close();
-			 };
-		},
-		connectAndCallVanillaWebSocketDirect: function(){
-			var that = this;
-			var wsUri = "ws://localhost:8080/ws";
-			var websocket = new WebSocket(wsUri);
-			websocket.onopen = function(evt) { 
-				websocket.send("WebSocket rocks");
-			};
-			websocket.onmessage = function(evt) {
+				var data = evt.data;
 				that.getView().getModel().setProperty("/webSocketText", evt.data);
 				websocket.close();
 			 };
