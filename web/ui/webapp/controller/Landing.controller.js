@@ -14,24 +14,10 @@ sap.ui.define([
 
 			this.getView().setModel(new JSONModel({
 				isMobile: Device.browser.mobile,
-				webSocketText: "Not yet Connected.",
+				webSocketText: "Web Socket not yet Connected.",
 				welcomeMessage: ""
 			}));	
 
-		},
-		/**
-		 * Helper funciton to build the web socket uri
-		 */
-		getWssUri: function(route){
-			var loc = window.location, new_uri;
-			if (loc.protocol === "https:") {
-				new_uri = "wss:";
-			} else {
-				new_uri = "ws:";
-			}
-			new_uri += "//" + loc.host;
-			new_uri += route;
-			return new_uri;
 		},
 
 		/**
@@ -46,30 +32,13 @@ sap.ui.define([
 		}, */
 
 		/**
-		 * Vanilla Web Socket Connection Test
-		 */
-		connectAndCallVanillaWebSocket: function(){
-			var that = this;
-			var wsUri = this.getWssUri("/api/ws/");
-			var websocket = new WebSocket(wsUri);
-			websocket.onopen = function(evt) { 
-				websocket.send("WebSocket rocks");
-			};
-			websocket.onmessage = function(evt) {
-				var data = evt.data;
-				that.getView().getModel().setProperty("/webSocketText", evt.data);
-				websocket.close();
-			 };
-		},
-
-		/**
 		 * Socket.IO Connection Test
 		 */
 		connectAndCallWebSocket: function(){
-			var wsUri = this.getWssUri("/api/ws/");
+
 			var that = this;
 
-			var socket = io.connect('localhost:3000', {
+			var socket = io.connect( {
 				'path': '/api/ws/socket.io'
 			  });
 
@@ -81,9 +50,7 @@ sap.ui.define([
 			// or with emit() and custom event names
 			socket.emit('salutations', 'Hello!', { 'mr': 'john' }, Uint8Array.from([1, 2, 3, 4]));
 
-			});
-
-			
+			});			
 
 			// handle the event sent with socket.send()
 			socket.on('my_response', data => {
