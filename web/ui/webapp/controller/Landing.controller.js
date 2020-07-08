@@ -18,22 +18,37 @@ sap.ui.define([
 
 		},
 		/**
-		 * Redirect if not logged in
+		 * Helper funciton to build the web socket uri
 		 */
+		getWssUri: function(route){
+			var loc = window.location, new_uri;
+			if (loc.protocol === "https:") {
+				new_uri = "wss:";
+			} else {
+				new_uri = "ws:";
+			}
+			new_uri += "//" + loc.host;
+			new_uri += route;
+			return new_uri;
+		},
+
+		/**
+		 * Redirect if not logged in
+		
 		onBeforeRendering: function() {
 
 			//--Check if we are logged in, otherwise route to login
 			if(this.getView().getModel("store").getProperty("/gameId") === ""){
 				sap.ui.core.UIComponent.getRouterFor(this).navTo("router");
 			}
-		},
+		}, */
 
 		/**
 		 * Vanilla Web Socket Connection Test
 		 */
 		connectAndCallVanillaWebSocket: function(){
 			var that = this;
-			var wsUri = "wss://echo.websocket.org/";
+			var wsUri = this.getWssUri("/api/ws");
 			var websocket = new WebSocket(wsUri);
 			websocket.onopen = function(evt) { 
 				websocket.send("WebSocket rocks");
