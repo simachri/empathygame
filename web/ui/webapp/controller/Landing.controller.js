@@ -59,6 +59,18 @@ sap.ui.define([
 				websocket.close();
 			 };
 		},
+		connectAndCallVanillaWebSocketDirect: function(){
+			var that = this;
+			var wsUri = "ws://localhost:8080/ws";
+			var websocket = new WebSocket(wsUri);
+			websocket.onopen = function(evt) { 
+				websocket.send("WebSocket rocks");
+			};
+			websocket.onmessage = function(evt) {
+				that.getView().getModel().setProperty("/webSocketText", evt.data);
+				websocket.close();
+			 };
+		},
 
 		/**
 		 * Socket.IO Connection Test
