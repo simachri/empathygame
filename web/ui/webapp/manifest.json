@@ -30,10 +30,6 @@
 					"fallbackLocale": "en"
 				}
 			},
-			"": {
-				"type": "sap.ui.model.json.JSONModel",
-				"uri": "model/todoitems.json"
-			},
 			"store": {
 				"type": "sap.ui.model.json.JSONModel",
 				"uri": "model/store.json"

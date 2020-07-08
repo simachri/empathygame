@@ -24,7 +24,7 @@
 
 				<footer>
 					<OverflowToolbar visible="{= !!${view>/isMobile} }">
-						<SegmentedButton selectedKey="all" selectionChange=".onFilter" class="sapMSegmentedButtonNoAutoWidth">
+						<SegmentedButton selectedKey="all" class="sapMSegmentedButtonNoAutoWidth">
 							<items>
                                 <SegmentedButtonItem id="connectAndCallWebSocket"  icon="sap-icon://connected" text="Connect Socket.IO" press=".connectAndCallWebSocket"/>
                                 <SegmentedButtonItem id="connectAndCallVanillaWebSocket"  icon="sap-icon://connected" text="Connect Vanilla Socket" press=".connectAndCallVanillaWebSocket"/>             
