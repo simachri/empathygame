@@ -1,0 +1,26 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" xmlns:l="sap.ui.layout" controllerName="empathygame.controller.Router" displayBlock="true">
+			<Page>
+				<customHeader>
+					<f:ShellBar title="{i18n>TITLE}" homeIcon="./img/logo_ui5.png" />
+				</customHeader>
+				<content>
+					<f:DynamicPage>
+						<f:content>
+						    <FlexBox
+                                height="100%"								
+                                alignItems="Center"
+                                justifyContent="Center"
+                                >
+                                <items>                                    
+                                    <l:VerticalLayout >
+                                            <Label text="Please input your game id" labelFor="input-gameId"/>
+			                                <Input id="input-gameId" value="{store>/gameId}" placeholder="Game Id" submit=".setGameId()"/>
+                                            <Button id="button-submitGameId" icon="sap-icon://open-command-field" text="Submit" press=".setGameId()"/>                           
+                                    </l:VerticalLayout>
+                                </items>
+							</FlexBox>
+						</f:content>
+					</f:DynamicPage>
+				</content>
+			</Page>
+</mvc:View>

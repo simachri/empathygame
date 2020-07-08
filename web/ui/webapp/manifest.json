@@ -1,7 +1,7 @@
 {
 	"_version": "1.12.0",
 	"sap.app": {
-		"id": "sap.ui.demo.todo",
+		"id": "empathygame",
 		"type": "application"
 	},
 	"sap.ui5": {
@@ -15,16 +15,17 @@
 			}
 		},
 		"rootView": {
-			"viewName": "sap.ui.demo.todo.view.App",
+			"viewName": "empathygame.view.Router",
 			"type": "XML",
 			"async": true,
 			"id": "app"
+
 		},
 		"models": {
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "sap.ui.demo.todo.i18n.i18n",
+					"bundleName": "empathygame.i18n.i18n",
 					"supportedLocales": ["en", "de"],
 					"fallbackLocale": "en"
 				}
@@ -32,7 +33,12 @@
 			"": {
 				"type": "sap.ui.model.json.JSONModel",
 				"uri": "model/todoitems.json"
+			},
+			"store": {
+				"type": "sap.ui.model.json.JSONModel",
+				"uri": "model/store.json"
 			}
+
 		},
 		"resources": {
 			"css": [
@@ -40,6 +46,66 @@
 					"uri": "css/styles.css"
 				}
 			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"async": true,
+				"viewPath": "empathygame.view",
+				"controlAggregation": "pages",
+				"controlId": "app",
+				"clearControlAggregation": false
+			},
+			"routes": [
+				{
+					"name": "router",
+					"pattern": "",
+					"target": ["router"]
+				},
+				{
+					"name": "login",
+					"pattern": "login",
+					"target": ["login"]
+				},
+				{
+					"name": "password",
+					"pattern": "password",
+					"target": ["password"]
+				},
+				{
+					"name": "landing",
+					"pattern": "landing",
+					"target": ["landing"]
+				}
+
+			],
+			"targets": {
+				"router": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "Router"
+				},
+				"login": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "LoginGameId"
+				},
+				"password": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "LoginPassword"
+				},
+				"landing": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "LandingPage"
+				}
+			}
 		}
 	}
 }

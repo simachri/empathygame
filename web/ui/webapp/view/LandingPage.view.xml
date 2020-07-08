@@ -1,0 +1,39 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" controllerName="empathygame.controller.Landing" displayBlock="true" height="100%">
+		<App id="app">
+            <Page>
+				<customHeader>
+					<f:ShellBar title="{i18n>TITLE}" homeIcon="./img/logo_ui5.png" />
+				</customHeader>
+				<content>
+					<f:DynamicPage>
+						<f:header>
+							<f:DynamicPageHeader pinnable="false">
+								<Text text="Header Page" />
+							</f:DynamicPageHeader>
+						</f:header>
+						<f:content>
+							<VBox>
+                                <Text text="{store>/userId}" />
+                                <Text text="{store>/gameId}" />
+								<Text text="{store>/gamePwd}" />
+								<Text text="{/webSocketText}" />
+							</VBox>
+						</f:content>
+					</f:DynamicPage>
+				</content>
+
+				<footer>
+					<OverflowToolbar visible="{= !!${view>/isMobile} }">
+						<SegmentedButton selectedKey="all" selectionChange=".onFilter" class="sapMSegmentedButtonNoAutoWidth">
+							<items>
+                                <SegmentedButtonItem id="connectAndCallWebSocket"  icon="sap-icon://connected" text="Connect Socket.IO" press=".connectAndCallWebSocket"/>
+                                <SegmentedButtonItem id="connectAndCallVanillaWebSocket"  icon="sap-icon://connected" text="Connect Vanilla Socket" press=".connectAndCallVanillaWebSocket"/>             
+							</items>
+						</SegmentedButton>
+						<ToolbarSpacer />
+						<Button id="navToLogin" icon="sap-icon://visits" text=" Login" press=".navToLogin"/>
+					</OverflowToolbar>
+				</footer>
+			</Page>
+        </App>
+</mvc:View>
