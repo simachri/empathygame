@@ -2,8 +2,9 @@ sap.ui.define([
 	"sap/ui/Device",
 	"sap/ui/core/mvc/Controller",
 	'sap/m/MessageBox',
-	"sap/ui/model/json/JSONModel"
-], function(Device, Controller, MessageBox, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"empathygame/libs/socketio"
+], function(Device, Controller, MessageBox, JSONModel, socketiojs ) {
 	"use strict";
 
 
@@ -65,7 +66,29 @@ sap.ui.define([
 		 * Socket.IO Connection Test
 		 */
 		connectAndCallWebSocket: function(){
-			//--To Do...
+			var wsUri = this.getWssUri("/api/ws/");
+
+			var socket = io.connect('localhost:3000', {
+				'path': '/api/ws/socket.io'
+			  });
+
+			socket.on('connect', () => {
+			// either with send()
+			socket.send('Hello!');
+
+			// or with emit() and custom event names
+			socket.emit('salutations', 'Hello!', { 'mr': 'john' }, Uint8Array.from([1, 2, 3, 4]));
+			});
+
+			// handle the event sent with socket.send()
+			socket.on('message', data => {
+			console.log(data);
+			});
+
+			// handle the event sent with socket.emit()
+			socket.on('greetings', (elem1, elem2, elem3) => {
+			console.log(elem1, elem2, elem3);
+			});
 		},
 
 		/**
