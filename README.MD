@@ -1,9 +1,4 @@
-# Knowledge
-All findings during this projects are documented. Please visit
 
-| Topic | Documentation |
-| ----- | ------------- |
-| UI5   |  [UI5](docs/UI5_Knowledge.md) |
 
 # Deployment to SAP Cloud Platform
 
@@ -61,3 +56,10 @@ npm run dev
 ```
 
 The service is reachable on localhost:3000 where the api is accessable on localhost:3000/api and the ui is accessable on localhost:3000/ui.
+
+# Knowledge Documentation
+All findings during this projects are documented. Please visit
+
+| Topic | Documentation |
+| ----- | ------------- |
+| UI5   |  [UI5 Knowledge](docs/UI5_Knowledge.md) |
