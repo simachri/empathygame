@@ -5,6 +5,7 @@
 
 1. Start python backend. Assumed to run on localhost:8080
 2. Go to /web and execute
+    * npm config set @sap:registry https://npm.sap.com // Only the first time
     * npm install
     * npm run dev
 
