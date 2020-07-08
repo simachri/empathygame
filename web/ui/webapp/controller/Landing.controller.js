@@ -49,7 +49,7 @@ sap.ui.define([
 		 */
 		connectAndCallVanillaWebSocket: function(){
 			var that = this;
-			var wsUri = this.getWssUri("/api/ws");
+			var wsUri = this.getWssUri("/api/ws/");
 			var websocket = new WebSocket(wsUri);
 			websocket.onopen = function(evt) { 
 				websocket.send("WebSocket rocks");
