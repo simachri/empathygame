@@ -85,10 +85,8 @@ sap.ui.define([
 
 				// Check if we face mult. repositories
 				if(json !== null && json !== undefined){
-					if(that.isArray(json.repoAndConnectionInfos)){
 					// Take first entry as default
 					that.getView().getModel().setProperty("/welcomeMessage", json.message);
-					}
 				} 
 				else{
 					MessageBox.error("Payload is null or undefined");
