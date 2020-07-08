@@ -14,7 +14,8 @@ sap.ui.define([
 			this.getView().setModel(new JSONModel({
 				isMobile: Device.browser.mobile,
 				webSocketText: "",
-			}), "view");	
+				welcomeMessage: "Not yet Connected.",
+			}));	
 
 		},
 		/**
@@ -64,6 +65,34 @@ sap.ui.define([
 		 */
 		connectAndCallWebSocket: function(){
 			//--To Do...
+		},
+
+		/**
+		 * Call hello world test
+		 */
+		callToGetWelcomeMessage: function(){
+			var that = this;
+			return jQuery
+				.ajax({
+				url: "/api/hello",
+				method: "GET",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader('X-Csrf-Token', 'fetch');
+				},
+				})
+				.success(function(json, textStatus, request) {
+
+				// Check if we face mult. repositories
+				if(json !== null && json !== undefined){
+					if(that.isArray(json.repoAndConnectionInfos)){
+					// Take first entry as default
+					that.getView().getModel().setProperty("/welcomeMessage", json.message);
+					}
+				} 
+				else{
+					MessageBox.error("Payload is null or undefined");
+				}     
+				}).always(function(res, textStatus, request) { that.addXcrfTokenHeader(request)});//--Add new updated X-CSRF-Token 
 		},
 
 		/**
