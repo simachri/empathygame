@@ -4,23 +4,26 @@ import uvicorn
 import socketio
 from fastapi import FastAPI
 
-# FastAPI will serve as our main app.
-from starlette.websockets import WebSocket
-
-app = FastAPI(debug=True)
+rest_api = FastAPI()
 # Socket.IO will be mounted as a sub application to the FastAPI main app.
 # See the info here: https://github.com/tiangolo/fastapi/issues/129
 sio = socketio.AsyncServer(async_mode='asgi')
-# socket_app = socketio.ASGIApp(sio)
-# app.mount('/new', socket_app)
+# Note: It is mandatory to perform all calls to the websocket API with a trailing slash /.
+# Otherwise, an error is returned, see ASGIApp.__call__.
+# We use a constant that we can reference for our unit tests.
+SOCKETIO_PATH = '/ws'
+composed_app = socketio.ASGIApp(sio, other_asgi_app=rest_api, socketio_path=SOCKETIO_PATH)
 
 
-@app.get("/hello")
+@rest_api.get("/hello")
 async def root():
     return {"message": "Hello World"}
 
+
 # See the example coding from https://github.com/miguelgrinberg/python-socketio/blob/master/examples/server/asgi/app.py
 background_task_started = False
+
+
 async def background_task():
     """Example of how to send server generated events to clients."""
     count = 0
@@ -29,13 +32,8 @@ async def background_task():
         count += 1
         await sio.emit('server_response', {'data': 'Server generated event'})
 
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    while True:
-        data = await websocket.receive_text()
-        await websocket.send_text(f"Message text was: {data}")
 
+# noinspection PyUnusedLocal
 @sio.on('connect')
 async def test_connect(sid, environ):
     print('connect', sid)
@@ -45,6 +43,7 @@ async def test_connect(sid, environ):
         background_task_started = True
     await sio.emit('my_response', {'data': 'Connected', 'count': 0}, room=sid)
 
+
 port = os.environ['PORT']
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=int(port))
+    uvicorn.run(composed_app, host="0.0.0.0", port=int(port))
