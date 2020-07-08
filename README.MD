@@ -1,3 +1,10 @@
+# Knowledge
+All findings during this projects are documented. Please visit
+
+| Topic | Documentation |
+| ----- | ------------- |
+| UI5   |  [UI5](docs/UI5_Knowledge.md) |
+
 # Deployment to SAP Cloud Platform
 
 * *manifest.yml*: Required for the deployment to **SAP Cloud Platform**.
