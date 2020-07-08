@@ -1,0 +1,21 @@
+{
+    "welcomeFile": "/ui/dev-index.html",
+    "authenticationMethod": "none",
+    "sessionTimeout": 60,
+    "logout": {
+      "logoutEndpoint": "/do/logout"
+    },
+    "routes": [
+      {
+        "source": "^/ui(.*)$",
+        "target": "$1",
+        "localDir": "./ui/webapp",
+        "cacheControl": "no-cache, no-store, must-revalidate"
+      },
+      {
+        "source": "/api",
+        "target": "/",
+        "destination": "api"
+        }
+    ]
+  }

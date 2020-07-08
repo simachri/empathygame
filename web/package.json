@@ -1,0 +1,17 @@
+{
+  "name": "empathygame-web",
+  "version": "0.1.0",
+  "description": "Empathy Game Web Approuter",
+  "main": "server.js",
+  "dependencies": {
+    "@sap/approuter": "^6.8.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "node dev-server.js",
+    "start": "node --inspect server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Carsten Löher",
+  "license": "SEE LICENSE IN LICENSE FILE"
+}
