@@ -47,7 +47,7 @@ The routing definition is done in the `manfest.json` file:
 		{
 			"name": "routeB",
 			"pattern": "routeB",  #<-- url e.g. http://localhost:3000/ui/index.html#/routeB
-					"target": ["routeB"]
+			"target": ["routeB"]
 		}
 		],
 		"targets": {
