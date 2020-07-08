@@ -10,6 +10,12 @@ fastapi = "*"
 uvicorn = "*"
 hdbcli = "*"
 cfenv = "*"
+python-socketio = "*"
+starlette = "*"
+requests = "*"
+asynctest = "*"
+aiohttp = "*"
+async_timeout = "*"
 
 [requires]
 python_version = "3.8"

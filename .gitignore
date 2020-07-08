@@ -154,3 +154,4 @@ changes_preview.js
 AppVariant_index.html
 AppVariantPreviewPayload.zip
 mergedManifestDescriptor.json
+/.idea/sqldialects.xml
