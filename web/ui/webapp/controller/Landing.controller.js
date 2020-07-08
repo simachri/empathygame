@@ -14,8 +14,8 @@ sap.ui.define([
 
 			this.getView().setModel(new JSONModel({
 				isMobile: Device.browser.mobile,
-				webSocketText: "",
-				welcomeMessage: "Not yet Connected."
+				webSocketText: "Not yet Connected.",
+				welcomeMessage: ""
 			}));	
 
 		},
@@ -67,6 +67,7 @@ sap.ui.define([
 		 */
 		connectAndCallWebSocket: function(){
 			var wsUri = this.getWssUri("/api/ws/");
+			var that = this;
 
 			var socket = io.connect('localhost:3000', {
 				'path': '/api/ws/socket.io'
@@ -74,15 +75,19 @@ sap.ui.define([
 
 			socket.on('connect', () => {
 			// either with send()
+			that.getView().getModel().setProperty("/webSocketText", "Connect");
 			socket.send('Hello!');
 
 			// or with emit() and custom event names
 			socket.emit('salutations', 'Hello!', { 'mr': 'john' }, Uint8Array.from([1, 2, 3, 4]));
+
 			});
 
+			
+
 			// handle the event sent with socket.send()
-			socket.on('message', data => {
-			console.log(data);
+			socket.on('my_response', data => {
+				that.getView().getModel().setProperty("/webSocketText", JSON.stringify(data));
 			});
 
 			// handle the event sent with socket.emit()
