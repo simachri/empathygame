@@ -5,8 +5,8 @@ import socketio
 import uvicorn
 from fastapi import FastAPI
 
-from events import CONN_SUCCESS, NEW_GAME
-from models import Scenario, Player, SioNewGame, GameFactory
+from events import CONN_SUCCESS, NEW_GAME, JOIN_GAME, JOIN_GAME_ERROR, GAME_JOINED
+from models import Scenario, Player, SioNewGame, GameFactory, SioJoinGame, GameController
 
 rest_api = FastAPI()
 # Socket.IO will be mounted as a sub application to the FastAPI main app.
@@ -29,6 +29,10 @@ console = logging.StreamHandler()
 console.setLevel(logging.DEBUG)
 # add the handler to the root logger
 logging.getLogger('').addHandler(console)
+
+# GameController manages the running games.
+game_controller = GameController()
+
 
 @rest_api.get("/hello")
 async def root():
@@ -70,10 +74,6 @@ async def connect(sid, environ):
     await sio.emit(CONN_SUCCESS, room=sid)
 
 
-games = []
-GAME_SCENARIO = 'game_scenario'
-
-
 @sio.on(NEW_GAME)
 async def new_game(sid, data: SioNewGame):
     """Handle the incoming request for creating a new game.
@@ -83,20 +83,45 @@ async def new_game(sid, data: SioNewGame):
 
     A user_name will be provided, user_id will be initial and generated within this method.
     """
-    logging.debug(f"Incoming request for creating a new game from {sid} for scenario {data[GAME_SCENARIO]}.")
-    player = Player(sid, data.get('user_name'), data.get('user_id'))
-    game = GameFactory().create(Scenario(id = data[GAME_SCENARIO]), player)
-    games.append(game)
+    sio_data = SioNewGame.parse_obj(data)
+    logging.debug(f"Incoming request for creating a new game from {sid} for scenario {sio_data.game_scenario}.")
+    player = Player(sid, sio_data.user_name, sio_data.user_id)
+    game = GameFactory().create(Scenario(id=sio_data.game_scenario), player)
+    game_controller.add(game)
     sess = await sio.get_session(sid)
     sess['game_id'] = game.id
-    logging.debug(f"New game created with ID {game.id} and password {game.pwd}.")
     await sio.save_session(sid, sess)
+    logging.debug(f"New game created with ID {game.id} and password {game.pwd}.")
+    sio_data.game = game
+    sio_data.user_id = player.user_id
     logging.debug(f"Emitting event {NEW_GAME} to {sid}.")
-    ret = SioNewGame.parse_obj(data)
-    ret.game = game
-    ret.user_name = player.user_name
-    ret.user_id = player.user_id
-    await sio.emit(NEW_GAME, data=ret.emit())
+    await sio.emit(NEW_GAME, data=sio_data.emit(), room=sid)
+
+
+@sio.on(JOIN_GAME)
+async def new_game(sid, data: SioJoinGame):
+    """Handle the incoming request for joining a game.
+    """
+    sio_data = SioJoinGame.parse_obj(data)
+    logging.debug(f"Incoming request from {sid} to join game {sio_data.game_id}.")
+    player = Player(sid, sio_data.user_name, sio_data.user_id)
+    game = game_controller.get(sio_data.game_id)
+    if game is None:
+        await sio.emit(JOIN_GAME_ERROR, room=sid)
+        return
+    join_succeeded = game.join(player, sio_data.game_pwd)
+    if not join_succeeded:
+        await sio.emit(JOIN_GAME_ERROR, room=sid)
+        return
+    sess = await sio.get_session(sid)
+    sess['game_id'] = game.id
+    await sio.save_session(sid, sess)
+    logging.debug(f"{sid} successfully joined game {game.id}.")
+    sio_data.game = game
+    sio_data.user_name = player.user_name
+    sio_data.user_id = player.user_id
+    logging.debug(f"Emitting event {GAME_JOINED} to {sid}.")
+    await sio.emit(GAME_JOINED, data=sio_data.emit(), room=sid)
 
 
 if __name__ == "__main__":

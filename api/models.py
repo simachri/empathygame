@@ -1,5 +1,5 @@
 import random
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 from pydantic import BaseModel
 
@@ -35,6 +35,27 @@ class Game(BaseModel):
     host: Player
     id: str
     pwd: str
+    players: List[Player] = []
+
+    def join(self, player: Player, pwd: str) -> bool:
+        """Returns True if the join was successful, otherwise false."""
+        if pwd != self.pwd:
+            return False
+        self.players.append(player)
+        return True
+
+
+class GameController:
+    """Controls all running games and provides methods for searching and querying games."""
+    running_games: Dict[str, Game] = {}
+
+    def add(self, game: Game):
+        """Add a game to the controller."""
+        self.running_games[game.id] = game
+
+    def get(self, game_id: str) -> Game:
+        """Returns None if no game is found for the provided game_id."""
+        return self.running_games.get(game_id)
 
 
 class GameFactory:
@@ -78,6 +99,8 @@ class SioNewGame(BaseModel):
 
 
 class SioJoinGame(BaseModel):
+    game_id: str
+    game_pwd: str
     user_id: str = None
     user_name: str = None
     game: Game = None
@@ -92,7 +115,7 @@ class SioJoinGame(BaseModel):
 
     def emit(self) -> Dict:
         """Create the dictionary for the emitting event."""
-        return {'game_id': self.game.id,
-                'game_pwd': self.game.pwd,
-                'user_id': self.user_id,
-                'user_name': self.user_name}
+        ret = {'players': []}
+        for player in self.game.players:
+            ret['players'].append({'user_id': player.user_id, 'user_name': player.user_name})
+        return ret
