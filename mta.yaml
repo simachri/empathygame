@@ -3,16 +3,16 @@ _schema-version: '2.1'
 description: Empahty Game
 version: 0.1.0
 modules:
-  - name: empathygame-api
-    type: python
-    path: ./api
-    parameters:
-      disk-quota: 256M
-      memory: 256M
-    provides:
-      - name: api
-        properties:
-          api_url: '${default-url}'
+#  - name: empathygame-api
+#    type: python
+#    path: ./api
+#    parameters:
+#      disk-quota: 256M
+#      memory: 256M
+#    provides:
+#      - name: api
+#        properties:
+#          api_url: '${default-url}'
   - name: empathygame-web
     type: approuter.nodejs
     path: ./web
@@ -24,4 +24,4 @@ modules:
         group: destinations
         properties:
           name: api
-          url: '~{api_url}'
+          url: 'https://ic-cf-2020-team-424-empathygame-api.cfapps.eu10.hana.ondemand.com'
