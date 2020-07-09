@@ -9,7 +9,7 @@ process.env.destinations = '[' +
 ']'; //--Route to local python backend
 
 //--Load development xs-app.json
-var xsAppConfig = JSON.parse(fs.readFileSync('./dev-xs-app.json', 'utf8'));
+var xsAppConfig = JSON.parse(fs.readFileSync('./xs-app.json', 'utf8'));
 //</--DEV-->
 
 var approuter = new AppRouter();
