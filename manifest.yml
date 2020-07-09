@@ -1,7 +1,7 @@
 ---
 applications:
-  - name: empathygame
-    host: empathygame
+  - name: empathygame-api
+    host: empathygame-api
     path: .
     memory: 128M
     command: python api/main.py
