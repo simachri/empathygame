@@ -19,9 +19,9 @@ modules:
     parameters:
       disk-quota: 256M
       memory: 256M
-    requires:
-      - name: api
-        group: destinations
-        properties:
-          name: api
-          url: 'https://empathygame-api.cfapps.eu10.hana.ondemand.com'
+ #   requires:
+ #     - name: api
+ #       group: destinations
+ #       properties:
+ #        name: api
+ #         url: '~{api_url}'
