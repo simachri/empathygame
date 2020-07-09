@@ -24,7 +24,11 @@ logging.basicConfig(
         format="%(asctime)s,%(msecs)d %(levelname)s: %(message)s",
         datefmt="%H:%M:%S",
         )
-
+# define a Handler which writes INFO messages or higher to the sys.stderr
+console = logging.StreamHandler()
+console.setLevel(logging.DEBUG)
+# add the handler to the root logger
+logging.getLogger('').addHandler(console)
 
 @rest_api.get("/hello")
 async def root():
@@ -78,14 +82,19 @@ async def new_game(sid, data: SioNewGame):
     The game ID and the join password is returned as payload with event 'NEW_GAME'.
     """
     logging.debug(f"Incoming request for creating a new game from {sid} for scenario {data[GAME_SCENARIO]}.")
-    game = GameFactory().create(Scenario(data[GAME_SCENARIO]), Player(sid))
+    player = Player(sid, data.get('user_id'), data.get('user_name'))
+    game = GameFactory().create(Scenario(id = data[GAME_SCENARIO]), player)
     games.append(game)
     sess = await sio.get_session(sid)
     sess['game_id'] = game.id
     logging.debug(f"New game created with ID {game.id} and password {game.pwd}.")
     await sio.save_session(sid, sess)
     logging.debug(f"Emitting event {NEW_GAME} to {sid}.")
-    await sio.emit(NEW_GAME, data={'game_id': game.id, 'game_pwd': game.pwd})
+    ret = SioNewGame.parse_obj(data)
+    ret.game = game
+    ret.user_name = player.user_name
+    ret.user_id = player.user_id
+    await sio.emit(NEW_GAME, data=ret.emit())
 
 
 if __name__ == "__main__":

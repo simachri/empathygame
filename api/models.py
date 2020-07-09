@@ -1,32 +1,43 @@
 import random
+from typing import Dict, Any
 
 from pydantic import BaseModel
 
 
-class Player:
+class Player(BaseModel):
+    conn_id: str
+    user_id: str = None
+    user_name: str = None
 
-    def __init__(self, guid: str):
-        """Create a new player."""
-        self.id = guid
+    def __init__(self, conn_id: str, user_id: str = None, user_name: str = None, **data: Any):
+        """Create a new player.
+        :param guid:
+        :param user_id: Will be generated if empty.
+        :param user_name: Will be set to value of user_id if empty.
+        """
+        super().__init__(conn_id=conn_id, user_id=user_id, user_name=user_name, **data)
+        self.conn_id = conn_id
+        if user_id is None:
+            self.user_id = random.randint(100000, 999999)
+        else:
+            self.user_id = user_id
+        if user_name is None:
+            self.user_name = self.user_id
+        else:
+            self.user_name = user_name
 
 
-class Scenario:
+class Scenario(BaseModel):
     """A scenario that can be played as a game."""
-
-    def __init__(self, guid: str):
-        """Create a new scenario."""
-        self.id = guid
+    id: str
 
 
-class Game:
+class Game(BaseModel):
     """A game"""
-
-    def __init__(self, scenario: Scenario, host: Player, game_id: str, game_pwd: str):
-        """Create a new game instance."""
-        self.scenario = scenario
-        self.host = host
-        self.id = game_id
-        self.pwd = game_pwd
+    scenario: Scenario
+    host: Player
+    id: str
+    pwd: str
 
 
 class GameFactory:
@@ -44,14 +55,26 @@ class GameFactory:
 
     def create(self, scenario: Scenario, host: Player) -> Game:
         """Create a new game instance with a random game ID and a random game password."""
-        return Game(scenario, host, self.generate_pwd(), self.generate_pwd())
+        return Game(scenario=scenario, host=host, id=self.generate_id(), pwd=self.generate_pwd())
 
 
 class SioNewGame(BaseModel):
     game_scenario: str
     user_id: str = None
     user_name: str = None
+    game: Game = None
 
     def __getitem__(self, item):
         """Is required to work with python-socketio."""
         return self.__root__[item]
+
+    def get(self, item):
+        """Provide the usual 'get' method of a dictionary."""
+        self.dict().get(item)
+
+    def emit(self) -> Dict:
+        """Create the dictionary for the emitting event."""
+        return {'game_id': self.game.id,
+                'game_pwd': self.game.pwd,
+                'user_id': self.user_id,
+                'user_name': self.user_name}
