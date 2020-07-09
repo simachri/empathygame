@@ -25,9 +25,3 @@ modules:
         properties:
           name: api
           url: '~{api_url}'
-  - name: empathygame-ui
-    type: nodejs
-    path: ./web/ui
-    build-parameters:
-      builder: custom
-      commands: ['ui5 build -a --clean-dest']

@@ -1,5 +1,5 @@
 {
-    "welcomeFile": "/ui/index.html",
+    "welcomeFile": "/ui/dev-index.html",
     "authenticationMethod": "none",
     "sessionTimeout": 60,
     "logout": {
@@ -12,7 +12,7 @@
       {
         "source": "^/ui(.*)$",
         "target": "$1",
-        "localDir": "./ui/dist",
+        "localDir": "./ui/webapp",
         "cacheControl": "no-cache, no-store, must-revalidate"
       },
       {
