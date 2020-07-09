@@ -21,12 +21,12 @@ modules:
       memory: 256M
     requires:
       - name: api
-        type: html5
         group: destinations
         properties:
           name: api
           url: '~{api_url}'
   - name: empathygame-ui
+    type: nodejs
     path: ./web/ui
     build-parameters:
       builder: custom
