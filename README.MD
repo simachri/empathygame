@@ -2,17 +2,31 @@
 
 # Deployment to SAP Cloud Platform
 
-* *manifest.yml*: Required for the deployment to **SAP Cloud Platform**.
-* *runtime.txt*: Required for the deployment to **SAP Cloud Platform**.
-
-## SCP deplyment preparation
-1. Install [Cloud Foundry CLI](https://github.com/cloudfoundry/cli#downloads)
-2. Log on to our Cloud Foundry Environment through the CLI [Source](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/7a37d66c2e7d401db4980db0cd74aa6b.html):
+## One-time preparation
+1. Install [Cloud Foundry CLI](https://github.com/cloudfoundry/cli#downloads).
+2. Install [MultiApps CLI plugin for CF](https://github.com/cloudfoundry-incubator/multiapps-cli-plugin).
+4. Install [Cloud MTA Build Tool](https://sap.github.io/cloud-mta-build-tool/download/).
+3. Log on to our Cloud Foundry Environment through the CLI [Source](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/7a37d66c2e7d401db4980db0cd74aa6b.html):
 	* `cf login`
 	* API endpoint: https://api.cf.eu10.hana.ondemand.com  (taken from our Subaccount overview page)
 	* Email: `<your SAP mail address>`
 	* Password: `<your SSO SAP password>`
+	
+## Compound deployment
+**Note**: Does not yet work. It seems as the MTA build tool currently does not have a Python builder.
+4. Create a `requirements.txt` from the `Pipfile` through `pipenv run pip freeze > requirements.txt`.
+4. Download all the requirements to a `vendor` folder through `pip download -d vendor -r requirements.txt --platform manylinux1_x86_64 --only-binary=:all:`
+5. Create the `mtar` file by executing `mbt build`.
+6. Deploy the `mtar` file to HCP through `cf deploy mta_archives/...mtar`.
 
+## API deployment
+
+Run `cf push` which uses the `manifest.yml` and `runtime.txt`.
+
+## UI deployment
+
+5. Create the `mtar` file by executing `mbt build`.
+6. Deploy the `mtar` file to HCP through `cf deploy mta_archives/...mtar`.
 
 # Local development
 
