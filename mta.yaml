@@ -24,4 +24,4 @@ modules:
         group: destinations
         properties:
           name: api
-          url: 'https://ic-cf-2020-team-424-empathygame-api.cfapps.eu10.hana.ondemand.com'
+          url: 'https://empathygame-api.cfapps.eu10.hana.ondemand.com'
