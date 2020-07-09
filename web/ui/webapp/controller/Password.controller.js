@@ -2,8 +2,10 @@ sap.ui.define([
 	"sap/ui/Device",
 	"sap/ui/core/mvc/Controller",
 	'sap/m/MessageBox',
-	"sap/ui/model/json/JSONModel"
-], function(Device, Controller, MessageBox, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"empathygame/libs/socketio",
+    "empathygame/libs/empathygame"
+], function(Device, Controller, MessageBox, JSONModel, socketiojs, empathygamejs) {
 	"use strict";
 
 
@@ -31,6 +33,7 @@ sap.ui.define([
 		 * Function to access game on backend
 		 */
 		accessGame: function(oEvent) {
+			var that = this;
 
 			//--Check if password was given
 			if(this.getView().getModel("store").getProperty("/gamePwd") === ""){
@@ -38,9 +41,26 @@ sap.ui.define([
 			}
 			else{
 				//--Submit data to get access
-				this.getView().getModel("store").setProperty("/gamePwd", "****");
-				//--Navigate to landing page
-				this.navToLobby();
+				var socket = io.connect( {
+					'path': '/api/ws/socket.io'
+				});
+	
+				var eg = getEmpathyGame(socket);
+				that.getView().getModel("store").setProperty("/eg", eg);
+				var gameId = that.getView().getModel("store").getProperty("/gameId");
+				var gamePwd	= that.getView().getModel("store").getProperty("/gamePwd");
+				var userName = that.getView().getModel("store").getProperty("/userName");
+				var userId =	that.getView().getModel("store").getProperty("/userId");
+				eg.joinGame(gameId, gamePwd, userName,userId);
+				//--If join was successful, go to lobby
+				eg.getSocket().on('game_joined', data => {
+                	that.getView().getModel("store").setProperty("waitingPlayers", data);
+                	that.navToLobby();
+				});	
+				//--If join was not successful, show error message
+				eg.getSocket().on('invalid_name_or_pwd', data => {
+                	MessageBox.error("The game ID and/or your password is not correct");
+            	});	
 			}
 		},
 
