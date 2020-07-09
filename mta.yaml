@@ -21,6 +21,7 @@ modules:
       memory: 256M
     requires:
       - name: api
+        type: html5
         group: destinations
         properties:
           name: api
@@ -29,4 +30,4 @@ modules:
     path: ./web/ui
     build-parameters:
       builder: custom
-      commands: 'ui5 build -a --clean-dest'
+      commands: ['ui5 build -a --clean-dest']
