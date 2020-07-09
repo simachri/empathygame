@@ -88,6 +88,7 @@ async def connect(sid, data):
     await sio.emit(NEW_GAME, data={'game_id': game.id, 'game_pwd': game.pwd})
 
 
-port = os.environ['PORT']
 if __name__ == "__main__":
+    port = os.environ['PORT']
+    # TODO: Remove 'reload' before deploying for production.
     uvicorn.run(composed_app, host="0.0.0.0", port=int(port))
