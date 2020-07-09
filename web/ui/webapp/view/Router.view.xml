@@ -1,4 +1,4 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" controllerName="empathygame.controller.Router" displayBlock="true" height="100%">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" xmlns:l="sap.ui.layout" controllerName="empathygame.controller.Router" displayBlock="true" height="100%">
 		<App id="app">
             <Page>
 				<customHeader>
@@ -12,7 +12,10 @@
                                 alignItems="Center"
                                 justifyContent="Center">
                                 <items>
-                                    <Button id="navToLogin" icon="sap-icon://visits" text="Please Login" press=".navToLogin"/>                              
+									<l:VerticalLayout >
+										<Button id="navToCreateGame" icon="sap-icon://add-document" text="Create new EmpathyGame" press=".navToCreateGame" width="300px" type="Accept"/>  
+                                    	<Button id="navToLogin" icon="sap-icon://visits" text="Login to existing EmpathyGame" press=".navToLogin" width="300px"/> 
+									</l:VerticalLayout >                             
                                 </items>
 							</FlexBox>
 						</f:content>
