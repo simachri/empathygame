@@ -1,5 +1,4 @@
 from random import random
-from typing import Any
 
 from pydantic import BaseModel
 
@@ -43,9 +42,8 @@ class GameFactory:
         """Generates a random 5 digit game password."""
         return random.randint(10000, 99999)
 
-    def create(self, scenario: Scenario, host: Player, **data: Any) -> Game:
+    def create(self, scenario: Scenario, host: Player) -> Game:
         """Create a new game instance with a random game ID and a random game password."""
-        super().__init__(**data)
         return Game(scenario, host, self.generate_pwd(), self.generate_pwd())
 
 
