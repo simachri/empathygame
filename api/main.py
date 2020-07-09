@@ -74,15 +74,17 @@ games = []
 GAME_SCENARIO = 'game_scenario'
 
 
-@sio.on('new_game')
+@sio.on(NEW_GAME)
 async def new_game(sid, data: SioNewGame):
     """Handle the incoming request for creating a new game.
 
     A new game instance is created for the provided scenario.
     The game ID and the join password is returned as payload with event 'NEW_GAME'.
+
+    A user_name will be provided, user_id will be initial and generated within this method.
     """
     logging.debug(f"Incoming request for creating a new game from {sid} for scenario {data[GAME_SCENARIO]}.")
-    player = Player(sid, data.get('user_id'), data.get('user_name'))
+    player = Player(sid, data.get('user_name'), data.get('user_id'))
     game = GameFactory().create(Scenario(id = data[GAME_SCENARIO]), player)
     games.append(game)
     sess = await sio.get_session(sid)
