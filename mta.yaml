@@ -1,0 +1,32 @@
+ID: empathygame
+_schema-version: '2.1'
+description: Empahty Game
+version: 0.1.0
+modules:
+  - name: empathygame-api
+    type: python
+    path: ./api
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+    provides:
+      - name: api
+        properties:
+          api_url: '${default-url}'
+  - name: empathygame-web
+    type: approuter.nodejs
+    path: ./web
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: api
+        group: destinations
+        properties:
+          name: api
+          url: '~{api_url}'
+  - name: empathygame-ui
+    path: ./web/ui
+    build-parameters:
+      builder: custom
+      commands: 'ui5 build -a --clean-dest'

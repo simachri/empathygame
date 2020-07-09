@@ -16,8 +16,8 @@
         "cacheControl": "no-cache, no-store, must-revalidate"
       },
       {
-        "source": "^/api/(.*)$",
-        "target": "$1",
+        "source": "/api",
+        "target": "/",
         "destination": "api"
         }
     ]
