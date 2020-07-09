@@ -13,11 +13,10 @@
 						</f:header>
 						<f:content>
 							<VBox>
-                                <Text text="{store>/userId}" />
-                                <Text text="{store>/gameId}" />
-								<Text text="{store>/gamePwd}" />
-								<Text text="{/webSocketText}" />
-								<Text text="{/welcomeMessage}" />
+							 	<Text text="User Name: {store>/userName}" />
+                                <Text text="User Id: {store>/userId}" />
+                                <Text text="Game Id: {store>/gameId}" />
+								<Text text="Game Password: {store>/gamePwd}" />
 							</VBox>
 						</f:content>
 					</f:DynamicPage>

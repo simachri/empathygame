@@ -13,7 +13,7 @@
                                 >
                                 <items>                                    
                                     <l:VerticalLayout >
-                                            <Label text="Please input your name" labelFor="input-userName"/>
+                                            <Label text="Please enter your name" labelFor="input-userName"/>
 			                                <Input id="input-userName" value="{store>/userName}" placeholder="Your Name" submit=".setUserName"/>
                                             <Button id="button-submitUserName" icon="sap-icon://open-command-field" text="" press=".setUserName"/>                           
                                     </l:VerticalLayout>

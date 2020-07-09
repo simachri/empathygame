@@ -7,12 +7,14 @@
 				<content>
 					<f:DynamicPage>
 						<f:content>	
-							<BusyIndicator class="sapUiHorizontalAlignCenter" size="1.6rem"  visible="true"/>		
+							<BusyIndicator class="sapUiHorizontalAlignCenter" size="1.6rem"  visible="{/loading}"/>		
 							<FlexBox
                                 height="100%"
                                 alignItems="Center"
                                 justifyContent="Center">								
-                                <items>									
+                                <items>	
+								<l:VerticalLayout >
+									<Label text="Please choose the game you want to play:" labelFor="gameList" class="sapUiSmallMarginEnd"/>								
 									<ComboBox
 									
 										id="gameList"
@@ -25,7 +27,8 @@
 										loadItems="handleLoadItems">
 										<core:ListItem key="{key}" text="{text}"/>
 									</ComboBox>
-                                    <Button id="createGameButton" icon="sap-icon://add-document" text="Create Game" press=".createGame" type="Emphasized"/>                              
+                                    <Button id="createGameButton" icon="sap-icon://add-document" text="Create Game" press=".createGame" type="Emphasized"/>   
+									</l:VerticalLayout >                           
                                 </items>								
 							</FlexBox>			
 						</f:content>
