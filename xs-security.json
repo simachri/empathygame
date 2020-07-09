@@ -1,0 +1,20 @@
+{
+    "xsappname": "xsuaa-empathygame",
+    "tenant-mode": "dedicated",
+    "authorities": ["uaa.user"],
+    "scopes": [
+      {
+        "name": "uaa.user",
+        "description": "Default scope for user"
+      }
+    ],
+    "role-templates": [
+      {
+        "name": "Token_Exchange",
+        "description": "UAA",
+        "scope-references": [
+          "uaa.user"
+        ]
+      }
+    ]
+  }
