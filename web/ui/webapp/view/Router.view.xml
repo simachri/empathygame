@@ -13,8 +13,8 @@
                                 justifyContent="Center">
                                 <items>
 									<l:VerticalLayout >
-										<Button id="navToCreateGame" icon="sap-icon://add-document" text="Create new EmpathyGame" press=".navToCreateGame" width="300px" type="Accept"/>  
-                                    	<Button id="navToLogin" icon="sap-icon://visits" text="Login to existing EmpathyGame" press=".navToLogin" width="300px"/> 
+										<Button id="navToCreateGame" icon="sap-icon://add-document" text="Create new EmpathyGame" press=".navToUserName('new')" width="300px" type="Accept"/>  
+                                    	<Button id="navToLogin" icon="sap-icon://visits" text="Login to existing EmpathyGame" press=".navToUserName('login')" width="300px"/> 
 									</l:VerticalLayout >                             
                                 </items>
 							</FlexBox>

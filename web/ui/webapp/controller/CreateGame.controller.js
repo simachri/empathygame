@@ -62,8 +62,8 @@ sap.ui.define([
             //--Process event "new_game" reached
 			socket.on('new_game', data => {
                 that.getView().getModel().setProperty("loading", false);
-                that.getView().getModel().setProperty("store>/gameId", data.game_id);
-                that.getView().getModel().setProperty("store>/gamePwd", data.game_pwd);
+                that.getView().getModel("store").setProperty("/gameId", data.game_id);
+                that.getView().getModel("store").setProperty("/gamePwd", data.game_pwd);
                 //--Redirect to lobby
                 that.navToLobby();
             });	
@@ -80,7 +80,7 @@ sap.ui.define([
 
             if(selectedGame !== null && selectedGame !== undefined && selectedGame !== ""){
                 that.getView().getModel().setProperty("/gameName", selectedGame);
-                that.getGameIdPwd();                
+                that.getGameIdPwd(selectedGame);                
             }
             else{
                 MessageBox.error("Please select a game you want to play");

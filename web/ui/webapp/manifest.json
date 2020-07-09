@@ -60,6 +60,11 @@
 					"target": ["router"]
 				},
 				{
+					"name": "userName",
+					"pattern": "userName",
+					"target": ["userName"]
+				},
+				{
 					"name": "login",
 					"pattern": "login",
 					"target": ["login"]
@@ -87,6 +92,12 @@
 					"transition": "slide",
 					"clearControlAggregation": false,
 					"viewName": "Router"
+				},
+				"userName": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "LoginUserName"
 				},
 				"login": {
 					"viewType": "XML",
