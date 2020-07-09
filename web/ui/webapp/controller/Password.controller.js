@@ -50,7 +50,7 @@ sap.ui.define([
 				var gameId = that.getView().getModel("store").getProperty("/gameId");
 				var gamePwd	= that.getView().getModel("store").getProperty("/gamePwd");
 				var userName = that.getView().getModel("store").getProperty("/userName");
-				var userId =	that.getView().getModel("store").getProperty("/userId");
+				var userId = that.getView().getModel("store").getProperty("/userId");
 				eg.joinGame(gameId, gamePwd, userName,userId);
 				//--If join was successful, go to lobby
 				eg.getSocket().on('game_joined', data => {

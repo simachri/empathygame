@@ -1,10 +1,10 @@
 sap.ui.define([
 	"sap/ui/Device",
 	"sap/ui/core/mvc/Controller",
-	'sap/m/MessageBox',
 	"sap/ui/model/json/JSONModel",
-	"empathygame/libs/socketio"
-], function(Device, Controller, MessageBox, JSONModel, socketiojs ) {
+	'sap/m/MessageBox',
+	'sap/m/MessageToast'
+], function(Device, Controller, JSONModel, MessageBox, MessageToast ) {
 	"use strict";
 
 
@@ -30,6 +30,19 @@ sap.ui.define([
 				sap.ui.core.UIComponent.getRouterFor(this).navTo("router");
 			}
 		}, */
+
+		onAfterRendering: function(){
+			//--Update view if player are joining or leaving...
+			var eg = this.getView().getModel("store").getProperty("/eg");
+			eg.getSocket().on('player_joined', data => {
+				MessageToast.show ("Player has joined.");
+				that.getView().getModel("store").setProperty("waitingPlayers", data);
+			});
+			eg.getSocket().on('player_left', data => {
+				MessageToast.show ("Player has left.");
+				that.getView().getModel("store").setProperty("waitingPlayers", data);
+			});						
+		},
 
 		showData: function(){
 			var gameId =   this.getView().getModel("store").getProperty("/gameId");
