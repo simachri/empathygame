@@ -13,7 +13,8 @@ sap.ui.define([
 
 			this.getView().setModel(new JSONModel({
 				isMobile: Device.browser.mobile,
-			}), "view");	
+				navFrom: "",
+			}));	
 
 		},
 
@@ -34,10 +35,40 @@ sap.ui.define([
 			}			
 		},
 
+		/**
+		 * 
+		 * Sets the user name
+		 */
+		setUserName: function(){
+			var that = this;
+			var userName= this.getView().getModel("store").getProperty("/userName");
+			if (userName === ""){
+				MessageBox.error("Please enter your name");
+			}
+			else{
+				var source = that.getView().getModel("store").getProperty("/commingFrom");
+				that.getView().getModel("store").setProperty("/commingFrom", "");
+				switch(source) {
+					case 'new':
+						this.navToCreateGame();
+					break;
+					case 'login':
+						this.navToLogin();
+					break;
+				
+				}	
+			}		
+		},
+
 
 		/**
 		 * Navigation
 		 */
+		navToUserName: function(source) {
+			this.getView().getModel("store").setProperty("/commingFrom", source);
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("userName");
+		},
+
 		navToLogin: function() {
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("login");
 		},
