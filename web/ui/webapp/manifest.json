@@ -70,9 +70,14 @@
 					"target": ["password"]
 				},
 				{
-					"name": "landing",
-					"pattern": "landing",
-					"target": ["landing"]
+					"name": "createGame",
+					"pattern": "createGame",
+					"target": ["createGame"]
+				},
+				{
+					"name": "lobby",
+					"pattern": "lobby",
+					"target": ["lobby"]
 				}
 
 			],
@@ -95,11 +100,17 @@
 					"clearControlAggregation": false,
 					"viewName": "LoginPassword"
 				},
-				"landing": {
+				"createGame": {
 					"viewType": "XML",
 					"transition": "slide",
 					"clearControlAggregation": false,
-					"viewName": "LandingPage"
+					"viewName": "CreateGame"
+				},
+				"lobby": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "Lobby"
 				}
 			}
 		}

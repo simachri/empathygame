@@ -1,4 +1,4 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" controllerName="empathygame.controller.Landing" displayBlock="true" height="100%">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" controllerName="empathygame.controller.Lobby" displayBlock="true" height="100%">
 		<App id="app">
             <Page>
 				<customHeader>

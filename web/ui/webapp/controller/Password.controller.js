@@ -40,7 +40,7 @@ sap.ui.define([
 				//--Submit data to get access
 				this.getView().getModel("store").setProperty("/gamePwd", "****");
 				//--Navigate to landing page
-				this.navToLanding();
+				this.navToLobby();
 			}
 		},
 
@@ -50,8 +50,8 @@ sap.ui.define([
 		navToLogin: function() {
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("login");
 		},
-		navToLanding: function() {
-        	sap.ui.core.UIComponent.getRouterFor(this).navTo("landing");
+		navToLobby: function() {
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("lobby");
 		}
 	});
 });

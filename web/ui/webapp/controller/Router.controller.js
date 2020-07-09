@@ -46,6 +46,10 @@ sap.ui.define([
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("password");
 		},
 
+		navToCreateGame: function() {
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("createGame");
+		},
+
 	});
 
 });

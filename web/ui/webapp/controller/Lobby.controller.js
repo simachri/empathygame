@@ -8,7 +8,7 @@ sap.ui.define([
 	"use strict";
 
 
-	return Controller.extend("empathygame.controller.Router", {
+	return Controller.extend("empathygame.controller.Lobby", {
 
 		onInit: function() {
 

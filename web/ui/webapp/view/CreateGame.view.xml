@@ -1,0 +1,36 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" xmlns:l="sap.ui.layout" controllerName="empathygame.controller.CreateGame" displayBlock="true" height="100%">
+		<App id="app">
+            <Page>
+				<customHeader>
+					<f:ShellBar title="{i18n>TITLE}" homeIcon="./img/logo_ui5.png" />
+				</customHeader>
+				<content>
+					<f:DynamicPage>
+						<f:content>	
+							<BusyIndicator class="sapUiHorizontalAlignCenter" size="1.6rem"  visible="true"/>		
+							<FlexBox
+                                height="100%"
+                                alignItems="Center"
+                                justifyContent="Center">								
+                                <items>									
+									<ComboBox
+									
+										id="gameList"
+										class="sapUiSmallMarginEnd"
+										items="{
+											path: '/gameCollection',
+											sorter: { path: 'text' },
+											suspended: false
+										}"
+										loadItems="handleLoadItems">
+										<core:ListItem key="{key}" text="{text}"/>
+									</ComboBox>
+                                    <Button id="createGameButton" icon="sap-icon://add-document" text="Create Game" press=".createGame" type="Emphasized"/>                              
+                                </items>								
+							</FlexBox>			
+						</f:content>
+					</f:DynamicPage>
+				</content>
+			</Page>
+        </App>
+</mvc:View>
