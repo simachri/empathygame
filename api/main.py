@@ -5,8 +5,8 @@ import socketio
 import uvicorn
 from fastapi import FastAPI
 
-from controller import Game, Scenario, Player
 from events import CONN_SUCCESS, NEW_GAME
+from models import Scenario, Player, SioNewGame, GameFactory
 
 rest_api = FastAPI()
 # Socket.IO will be mounted as a sub application to the FastAPI main app.
@@ -71,14 +71,14 @@ GAME_SCENARIO = 'game_scenario'
 
 
 @sio.on('new_game')
-async def connect(sid, data):
+async def new_game(sid, data: SioNewGame):
     """Handle the incoming request for creating a new game.
 
     A new game instance is created for the provided scenario.
     The game ID and the join password is returned as payload with event 'NEW_GAME'.
     """
     logging.debug(f"Incoming request for creating a new game from {sid} for scenario {data[GAME_SCENARIO]}.")
-    game = Game(Scenario(data[GAME_SCENARIO]), Player(sid))
+    game = GameFactory().create(Scenario(data[GAME_SCENARIO]), Player(sid))
     games.append(game)
     sess = await sio.get_session(sid)
     sess['game_id'] = game.id
