@@ -28,7 +28,8 @@
 						<SegmentedButton selectedKey="all" class="sapMSegmentedButtonNoAutoWidth">
 							<items>
                                 <SegmentedButtonItem id="connectAndCallWebSocket"  icon="sap-icon://connected" text="Connect Socket.IO" press=".connectAndCallWebSocket"/>
-								<SegmentedButtonItem id="callToGetWelcomeMessage"  icon="sap-icon://connected" text="Get Welcome Message" press=".callToGetWelcomeMessage"/>               
+								<SegmentedButtonItem id="callToGetWelcomeMessage"  icon="sap-icon://connected" text="Get Welcome Message" press=".callToGetWelcomeMessage"/>          
+								<SegmentedButtonItem id="shwoData"  icon="sap-icon://connected" text="Show Data" press=".showData"/>            
 							</items>
 						</SegmentedButton>
 						<ToolbarSpacer />

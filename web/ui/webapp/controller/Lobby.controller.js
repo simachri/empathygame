@@ -31,6 +31,11 @@ sap.ui.define([
 			}
 		}, */
 
+		showData: function(){
+			var gameId =   this.getView().getModel("store").getProperty("/gameId");
+			var gamePwd =   this.getView().getModel("store").getProperty("/gamePwd");
+		},
+
 		/**
 		 * Socket.IO Connection Test
 		 */
@@ -44,7 +49,7 @@ sap.ui.define([
 
 			socket.on('connect', () => {
 			// either with send()
-			that.getView().getModel().setProperty("/webSocketText", "Connect");
+			that.getView().getModel().setProperty("/webSocketText", "Connected");
 			socket.send('Hello!');
 
 			// or with emit() and custom event names
