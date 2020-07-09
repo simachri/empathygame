@@ -18,13 +18,13 @@
 
 If you are developing on a Windows machine and have installed all dependencies, please use script `run_windows_local.ps1` to start you local development environment.
 
-## Python backend (start first)
+## Service layer (Python API backend)
 
-3. Create new Python project with your favourite IDE.
-4. Use _Pipenv_ for dependency management.
-5. Clone the Github repo https://github.com/simachri/empathygame.
-6. Run `pipenv install` to install the dependencies locally.
-7. If you are using Windows and for example Powershell you need to set the environment variable:
+1. Create new Python project with your favourite IDE.
+2. Use _Pipenv_ for dependency management.
+3. Clone the Github repo https://github.com/simachri/empathygame.
+4. Run `pipenv install` to install the dependencies locally.
+5. If you are using Windows and for example Powershell you need to set the environment variable:
 ```
 # Set environment variable
 $Env:PORT = "8080"
@@ -32,12 +32,12 @@ $Env:PORT = "8080"
 # Start python server
 py ./api/main.py
 ```
-8. This is an example launch configuration from PyCharm:
+6. This is an example launch configuration from PyCharm:
 ![PyCharm run configuration](docs/resources/run_config_pycharm.png)
 
-## Frontend (start second)
+## UI layer
 
-For the first time, please add @sap to you npm and install all dependencies:
+For the first time, add `@sap` to you npm and install all dependencies:
 
 ```
 # Add @sap to your npm
