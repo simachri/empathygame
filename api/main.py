@@ -18,17 +18,10 @@ sio = socketio.AsyncServer(async_mode='asgi')
 SOCKETIO_PATH = '/ws'
 composed_app = socketio.ASGIApp(sio, other_asgi_app=rest_api, socketio_path=SOCKETIO_PATH)
 
-logging.basicConfig(
-        # TODO: Set to a less severe level for a productive system.
-        level=logging.DEBUG,
-        format="%(asctime)s,%(msecs)d %(levelname)s: %(message)s",
-        datefmt="%H:%M:%S",
-        )
-# define a Handler which writes INFO messages or higher to the sys.stderr
-console = logging.StreamHandler()
-console.setLevel(logging.DEBUG)
-# add the handler to the root logger
-logging.getLogger('').addHandler(console)
+# Set up logger.
+log = logging.getLogger('api')
+# TODO: For productive use, adjust the level.
+log.setLevel(logging.DEBUG)
 
 # GameController manages the running games.
 game_controller = GameController()
@@ -61,16 +54,16 @@ async def connect(sid, environ):
 
     A new user session will be created.
     """
-    logging.debug(f"New connection request with SID {sid}.")
+    log.debug(f"New connection request with SID {sid}.")
     global background_task_started
     if not background_task_started:
-        logging.debug(f"Background task not yet started. Launching...")
+        log.debug(f"Background task not yet started. Launching...")
         sio.start_background_task(background_task)
         background_task_started = True
-        logging.debug(f"Background task started.")
-    logging.debug(f"Creating new session.")
+        log.debug(f"Background task started.")
+    log.debug(f"Creating new session.")
     await sio.save_session(sid, {})
-    logging.debug(f"Emitting event {CONN_SUCCESS} to {sid}.")
+    log.debug(f"Emitting event {CONN_SUCCESS} to {sid}.")
     await sio.emit(CONN_SUCCESS, room=sid)
 
 
@@ -84,17 +77,18 @@ async def new_game(sid, data: SioNewGame):
     A user_name will be provided, user_id will be initial and generated within this method.
     """
     sio_data = SioNewGame.parse_obj(data)
-    logging.debug(f"Incoming request for creating a new game from {sid} for scenario {sio_data.game_scenario}.")
+    log.debug(f"Incoming request for creating a new game from {sio_data.user_name} ({sid}) for scenario {sio_data.game_scenario}.")
+    print('test')
     player = Player(sid, sio_data.user_name, sio_data.user_id)
     game = GameFactory().create(Scenario(id=sio_data.game_scenario), player)
     game_controller.add(game)
     sess = await sio.get_session(sid)
     sess['game_id'] = game.id
     await sio.save_session(sid, sess)
-    logging.debug(f"New game created with ID {game.id} and password {game.pwd}.")
+    log.debug(f"New game created with ID {game.id} and password {game.pwd}.")
     sio_data.game = game
     sio_data.user_id = player.user_id
-    logging.debug(f"Emitting event {NEW_GAME} to {sid}.")
+    log.debug(f"Emitting event {NEW_GAME} to {sio_data.user_name} ({sid}).")
     await sio.emit(NEW_GAME, data=sio_data.emit(), room=sid)
 
 
@@ -103,7 +97,7 @@ async def join_game(sid, data: SioJoinGame):
     """Handle the incoming request for joining a game.
     """
     sio_data = SioJoinGame.parse_obj(data)
-    logging.debug(f"Incoming request from {sid} to join game {sio_data.game_id}.")
+    log.debug(f"Incoming request from {sio_data.user_name} ({sid}) to join game {sio_data.game_id}.")
     player = Player(sid, sio_data.user_name, sio_data.user_id)
     game = game_controller.get(sio_data.game_id)
     if game is None:
@@ -116,15 +110,15 @@ async def join_game(sid, data: SioJoinGame):
     sess = await sio.get_session(sid)
     sess['game_id'] = game.id
     await sio.save_session(sid, sess)
-    logging.debug(f"{sid} successfully joined game {game.id}.")
+    log.debug(f"{sid} successfully joined game {game.id}.")
     sio_data.game = game
     sio_data.user_name = player.user_name
     sio_data.user_id = player.user_id
-    logging.debug(f"Emitting event {GAME_JOINED} to {sid}.")
+    log.debug(f"Emitting event {GAME_JOINED} to {sio_data.user_name} ({sid}).")
     await sio.emit(GAME_JOINED, data=sio_data.emit(), room=sid)
 
 
 if __name__ == "__main__":
     port = os.environ['PORT']
     # TODO: Remove 'reload' before deploying for production.
-    uvicorn.run(composed_app, host="0.0.0.0", port=int(port))
+    uvicorn.run("main:composed_app", host="0.0.0.0", port=int(port), reload=True)
