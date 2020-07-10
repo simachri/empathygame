@@ -20,7 +20,7 @@ class Player(BaseModel):
         super().__init__(conn_id=conn_id, user_id=user_id, user_name=user_name, **data)
         self.sid = conn_id
         self.user_name = user_name
-        if user_id is None:
+        if self.user_id is None:
             self.user_id = random.randint(100000, 999999)
         else:
             self.user_id = user_id
