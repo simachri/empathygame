@@ -5,8 +5,8 @@ import socketio
 import uvicorn
 from fastapi import FastAPI
 
-from events import CONN_SUCCESS, NEW_GAME, JOIN_GAME, JOIN_GAME_ERROR, GAME_JOINED
-from models import Scenario, Player, SioNewGame, GameFactory, SioJoinGame, GameController
+from events import CONN_SUCCESS, NEW_GAME, JOIN_GAME, JOIN_GAME_ERROR, GAME_JOINED, PLAYERS_CHANGED
+from models import Scenario, Player, SioNewGame, GameFactory, SioJoinGame, GameController, Game, SioPlayersChanged
 
 rest_api = FastAPI()
 # Socket.IO will be mounted as a sub application to the FastAPI main app.
@@ -128,6 +128,14 @@ async def join_game(sid, data: SioJoinGame):
     sio_data.user_id = player.user_id
     log.debug(f"Emitting event {GAME_JOINED} to {sio_data.user_name} ({sid}).")
     await sio.emit(GAME_JOINED, data=sio_data.emit(), room=sid)
+    # Notify all other players of the room.
+    await notify_player_joined(player, game)
+
+
+async def notify_player_joined(player: Player, game: Game):
+    """Emit an event 'players_changed" when a player joins a game."""
+    # Do not send the event to the player herself/himself.
+    await sio.emit(PLAYERS_CHANGED, SioPlayersChanged(game=game).emit(), room=game.id, skip_sid=player.sid)
 
 
 if __name__ == "__main__":

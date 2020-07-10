@@ -5,7 +5,9 @@ from pydantic import BaseModel
 
 
 class Player(BaseModel):
-    conn_id: str
+
+    """The socket IO connction ID."""
+    sid: str
     user_id: str = None
     user_name: str
 
@@ -16,7 +18,7 @@ class Player(BaseModel):
         :param user_id: Will be generated if empty.
         """
         super().__init__(conn_id=conn_id, user_id=user_id, user_name=user_name, **data)
-        self.conn_id = conn_id
+        self.sid = conn_id
         self.user_name = user_name
         if user_id is None:
             self.user_id = random.randint(100000, 999999)
@@ -104,6 +106,25 @@ class SioJoinGame(BaseModel):
     user_id: str = None
     user_name: str = None
     game: Game = None
+
+    def __getitem__(self, item):
+        """Is required to work with python-socketio."""
+        return self.__root__[item]
+
+    def get(self, item):
+        """Provide the usual 'get' method of a dictionary."""
+        self.dict().get(item)
+
+    def emit(self) -> Dict:
+        """Create the dictionary for the emitting event."""
+        ret = {'players': []}
+        for player in self.game.players:
+            ret['players'].append({'user_id': player.user_id, 'user_name': player.user_name})
+        return ret
+
+
+class SioPlayersChanged(BaseModel):
+    game: Game
 
     def __getitem__(self, item):
         """Is required to work with python-socketio."""
