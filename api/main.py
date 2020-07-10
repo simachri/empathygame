@@ -99,7 +99,7 @@ async def new_game(sid, data: SioNewGame):
 
 
 @sio.on(JOIN_GAME)
-async def new_game(sid, data: SioJoinGame):
+async def join_game(sid, data: SioJoinGame):
     """Handle the incoming request for joining a game.
     """
     sio_data = SioJoinGame.parse_obj(data)
