@@ -1,4 +1,4 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" controllerName="empathygame.controller.Lobby" displayBlock="true" height="100%">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" xmlns:l="sap.ui.layout" controllerName="empathygame.controller.Lobby" displayBlock="true" height="100%">
 		<App id="app">
             <Page>
 				<customHeader>
@@ -8,22 +8,36 @@
 					<f:DynamicPage>
 						<f:header>
 							<f:DynamicPageHeader pinnable="false">
-								<Text text="Header Page" />
+								<l:VerticalLayout >
+									<Text text="Your Name: {store>/userName}" />
+                                	<Text text="[Dev] User Id: {store>/userId}" />
+                                	<Text text="Game Id: {store>/gameId}" />
+									<Text text="Game Password: {store>/gamePwd}" />
+								</l:VerticalLayout >
 							</f:DynamicPageHeader>
-						</f:header>
+						</f:header>					
+
 						<f:content>
-							<VBox>
-							 	<Text text="User Name: {store>/userName}" />
-                                <Text text="User Id: {store>/userId}" />
-                                <Text text="Game Id: {store>/gameId}" />
-								<Text text="Game Password: {store>/gamePwd}" />
-							</VBox>
+							<List id="userList" items="{/players}">
+								<NotificationListItem
+									title="{user_name}"
+									description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+									showCloseButton="false"
+									datetime="1 hour"
+									unread="true"
+									priority="None"
+									close="onItemClose"
+									press="onListItemPress"
+									authorName="{user_name}"
+									authorPicture="test-resources/sap/m/images/Woman_04.png">
+								</NotificationListItem>
+							</List>
+						
 						</f:content>
 					</f:DynamicPage>
-				</content>
-
+				</content>					
 				<footer>
-					<OverflowToolbar>
+					<!--<OverflowToolbar>
 						<SegmentedButton selectedKey="all" class="sapMSegmentedButtonNoAutoWidth">
 							<items>
                                 <SegmentedButtonItem id="connectAndCallWebSocket"  icon="sap-icon://connected" text="Connect Socket.IO" press=".connectAndCallWebSocket"/>
@@ -33,7 +47,7 @@
 						</SegmentedButton>
 						<ToolbarSpacer />
 						<Button id="navToLogin" icon="sap-icon://visits" text=" Login" press=".navToLogin"/>
-					</OverflowToolbar>
+					</OverflowToolbar>-->
 				</footer>
 			</Page>
         </App>

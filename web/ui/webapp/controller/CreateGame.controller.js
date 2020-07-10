@@ -67,8 +67,13 @@ sap.ui.define([
             //--Process event "new_game" reached
 			socket.on('new_game', data => {
                 that.getView().getModel().setProperty("loading", false);
-                that.getView().getModel("store").setProperty("/gameId", data.game_id);
-                that.getView().getModel("store").setProperty("/gamePwd", data.game_pwd);
+                if(data !== null && data !== undefined){
+                    that.getView().getModel("store").setProperty("/gameId", data.game_id);
+                    that.getView().getModel("store").setProperty("/gamePwd", data.game_pwd);
+                    //--Put yourself first as waiting players
+                    var players = [{"user_name": data.user_name}];
+                    that.getView().getModel("store").setProperty("/waitingPlayers", players);
+                }
                 //--Redirect to lobby
                 that.navToLobby();
             });	

@@ -54,7 +54,10 @@ sap.ui.define([
 				eg.joinGame(gameId, gamePwd, userName,userId);
 				//--If join was successful, go to lobby
 				eg.getSocket().on('game_joined', data => {
-                	that.getView().getModel("store").setProperty("waitingPlayers", data);
+					if(data !== null && data !== undefined){
+						var players = data.players;
+						that.getView().getModel("store").setProperty("/waitingPlayers", players);
+					}                	
                 	that.navToLobby();
 				});	
 				//--If join was not successful, show error message

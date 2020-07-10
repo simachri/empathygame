@@ -12,36 +12,59 @@ sap.ui.define([
 
 		onInit: function() {
 
+			var store = this.getOwnerComponent().getModel("store"); 
+			var waitingPlayers = store.getProperty("/waitingPlayers");
+			
 			this.getView().setModel(new JSONModel({
 				isMobile: Device.browser.mobile,
-				webSocketText: "Web Socket not yet Connected.",
-				welcomeMessage: ""
-			}));	
+				players: waitingPlayers
+			}));
 
+			
+			//--Update view if player are joining or leaving...
+			var eg = store.getProperty("/eg")
+			eg.getSocket().on('players_changed', data => {
+				MessageToast.show ("Players in lobby changed");
+				if(data !== null && data !== undefined){
+					store.setProperty("/waitingPlayers", data.players);
+					this.getView().setModel(new JSONModel({						
+						players: data.players
+					}));
+				}
+			});				
 		},
 
 		/**
 		 * Redirect if not logged in
-		
+		*/
 		onBeforeRendering: function() {
 
 			//--Check if we are logged in, otherwise route to login
-			if(this.getView().getModel("store").getProperty("/gameId") === ""){
-				sap.ui.core.UIComponent.getRouterFor(this).navTo("router");
-			}
-		}, */
+			//if(this.getView().getModel("store").getProperty("/gameId") === ""){
+			//	sap.ui.core.UIComponent.getRouterFor(this).navTo("router");
+			//}
+			
+
+					
+
+		}, 
 
 		onAfterRendering: function(){
-			//--Update view if player are joining or leaving...
-			var eg = this.getView().getModel("store").getProperty("/eg");
-			eg.getSocket().on('player_joined', data => {
-				MessageToast.show ("Player has joined.");
-				that.getView().getModel("store").setProperty("waitingPlayers", data);
-			});
-			eg.getSocket().on('player_left', data => {
-				MessageToast.show ("Player has left.");
-				that.getView().getModel("store").setProperty("waitingPlayers", data);
-			});						
+
+			
+			/*
+			const model = this.getView().getModel();
+			var players = model.getProperty("/players");
+			var newPlayers = (players !== null && players !== undefined) ? players.concat({	title: "newFoo"	}) : {	title: "newFoo2"	};
+			model.setProperty("/players", newPlayers);
+
+			const model2 = this.getView().getModel("store");
+			var players2 = model2.getProperty("/waitingPlayers");
+			var newPlayers2 = (players2 !== null && players2 !== undefined) ? players2.concat({	title: "newFoo"	}) : {	title: "newFoo2"	};
+			model2.setProperty("/waitingPlayers", newPlayers2);
+			*/
+
+
 		},
 
 		showData: function(){
@@ -112,7 +135,7 @@ sap.ui.define([
 		 */
 		navToLogin: function() {
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("login");
-		},
+		}
 
 	});
 

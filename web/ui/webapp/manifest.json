@@ -33,6 +33,10 @@
 			"store": {
 				"type": "sap.ui.model.json.JSONModel",
 				"uri": "model/store.json"
+			},
+			"userCards": {
+				"type": "sap.ui.model.json.JSONModel",
+				"uri": "model/userCards.json"
 			}
 
 		},
