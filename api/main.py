@@ -32,19 +32,6 @@ async def root():
     return {"message": "Hello World"}
 
 
-# See the example coding from https://github.com/miguelgrinberg/python-socketio/blob/master/examples/server/asgi/app.py
-background_task_started = False
-
-
-async def background_task():
-    """Example of how to send server generated events to clients."""
-    count = 0
-    while True:
-        await sio.sleep(10)
-        count += 1
-        await sio.emit('server_response', {'data': 'Server generated event'})
-
-
 # noinspection PyUnusedLocal
 @sio.on('connect')
 async def connect(sid, environ):
@@ -55,12 +42,6 @@ async def connect(sid, environ):
     A new user session will be created.
     """
     log.debug(f"New connection request with SID {sid}.")
-    global background_task_started
-    if not background_task_started:
-        log.debug(f"Background task not yet started. Launching...")
-        sio.start_background_task(background_task)
-        background_task_started = True
-        log.debug(f"Background task started.")
     log.debug(f"Creating new session.")
     await sio.save_session(sid, {})
     log.debug(f"Emitting event {CONN_SUCCESS} to {sid}.")
