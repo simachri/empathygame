@@ -77,15 +77,18 @@ async def new_game(sid, data: SioNewGame):
     A user_name will be provided, user_id will be initial and generated within this method.
     """
     sio_data = SioNewGame.parse_obj(data)
-    log.debug(f"Incoming request for creating a new game from {sio_data.user_name} ({sid}) for scenario {sio_data.game_scenario}.")
-    print('test')
+    log.debug(f"Incoming request for creating a new game from {sio_data.user_name} ({sid})"
+              f"for scenario {sio_data.game_scenario}.")
+    # Create a new game instance.
     player = Player(sid, sio_data.user_name, sio_data.user_id)
     game = GameFactory().create(Scenario(id=sio_data.game_scenario), player)
     game_controller.add(game)
+    # Update the user session with the new game.
     sess = await sio.get_session(sid)
     sess['game_id'] = game.id
     await sio.save_session(sid, sess)
     log.debug(f"New game created with ID {game.id} and password {game.pwd}.")
+    # Emit the event that the game has been successfully created.
     sio_data.game = game
     sio_data.user_id = player.user_id
     log.debug(f"Emitting event {NEW_GAME} to {sio_data.user_name} ({sid}).")
@@ -95,9 +98,12 @@ async def new_game(sid, data: SioNewGame):
 @sio.on(JOIN_GAME)
 async def join_game(sid, data: SioJoinGame):
     """Handle the incoming request for joining a game.
+
+    If no game for the provided ID exists or the password is wrong, an 'invalid_game_or_pwd' event will be emitted.
     """
     sio_data = SioJoinGame.parse_obj(data)
     log.debug(f"Incoming request from {sio_data.user_name} ({sid}) to join game {sio_data.game_id}.")
+    # Find the game for the provided ID and try to join it.
     player = Player(sid, sio_data.user_name, sio_data.user_id)
     game = game_controller.get(sio_data.game_id)
     if game is None:
@@ -107,10 +113,12 @@ async def join_game(sid, data: SioJoinGame):
     if not join_succeeded:
         await sio.emit(JOIN_GAME_ERROR, room=sid)
         return
+    # Update the user session.
     sess = await sio.get_session(sid)
     sess['game_id'] = game.id
     await sio.save_session(sid, sess)
     log.debug(f"{sid} successfully joined game {game.id}.")
+    # Emit the event that the game has been successfully joined.
     sio_data.game = game
     sio_data.user_name = player.user_name
     sio_data.user_id = player.user_id
