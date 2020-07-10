@@ -5,22 +5,21 @@ from pydantic import BaseModel
 
 
 class Player(BaseModel):
-
     """The socket IO connction ID."""
     sid: str
     user_id: str = None
     user_name: str
 
-    def __init__(self, conn_id: str, user_name: str, user_id: str = None, **data: Any):
+    def __init__(self, sid: str, user_name: str, user_id: str = None, **data: Any):
         """Create a new player.
-        :param guid: Socket connection ID of the user
+        :param sid: Socket connection ID of the user
         :param user_name:
         :param user_id: Will be generated if empty.
         """
-        super().__init__(conn_id=conn_id, user_id=user_id, user_name=user_name, **data)
-        self.sid = conn_id
+        super().__init__(sid=sid, user_id=user_id, user_name=user_name, **data)
+        self.sid = sid
         self.user_name = user_name
-        if self.user_id is None:
+        if self.user_id is None or self.user_id == "":
             self.user_id = random.randint(100000, 999999)
         else:
             self.user_id = user_id
