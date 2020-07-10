@@ -2,6 +2,8 @@
 
 # Deployment to SAP Cloud Platform
 
+Test the latest running deployment: https://empathygame.cfapps.eu10.hana.ondemand.com/
+
 ## One-time preparation
 1. Install [Cloud Foundry CLI](https://github.com/cloudfoundry/cli#downloads).
 2. Install [MultiApps CLI plugin for CF](https://github.com/cloudfoundry-incubator/multiapps-cli-plugin).
@@ -14,11 +16,12 @@
 	
 ## Compound deployment
 **Note**: Does not yet work. It seems as the MTA build tool currently does not have a Python builder.
-4. **Note**: Only do this, if the GitHub repo here does not already contain a `requirements.txt`. Create a `requirements.txt` from the `Pipfile` through `pipenv run pip freeze > requirements.txt`.
-4. Download all the requirements to a `vendor` folder through `pip download -d vendor -r requirements.txt --platform manylinux1_x86_64 --only-binary=:all:`
+
+1. **Note**: Only do this, if the GitHub repo here does not already contain a `requirements.txt`. Create a `requirements.txt` from the `Pipfile` through `pipenv run pip freeze > requirements.txt`.
+2. Download all the requirements to a `vendor` folder through `pip download -d vendor -r requirements.txt --platform manylinux1_x86_64 --only-binary=:all:`
     **Note**: The `requirements.txt` above might contain unrequired dependencies that lead to errors when downloading. Those dependencies can be removed with no harm.
-5. Create the `mtar` file by executing `mbt build`.
-6. Deploy the `mtar` file to HCP through `cf deploy mta_archives/...mtar`.
+3. Create the `mtar` file by executing `mbt build`.
+4. Deploy the `mtar` file to HCP through `cf deploy mta_archives/...mtar`.
 
 ## API deployment
 
