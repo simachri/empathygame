@@ -132,7 +132,8 @@ async def join_game(sid, data: SioJoinGame):
 
 async def notify_player_joined(player: Player, game: Game):
     """Emit an event 'players_changed" when a player joins a game."""
-    log.debug(f"Notifying the players of game {game.id} that a new player has joined.")
+    log.debug(f"Notifying the players of game {game.id} that a new player has joined by emitting event "
+              f"'{PLAYERS_CHANGED}'.")
     # Do not send the event to the player herself/himself.
     await sio.emit(PLAYERS_CHANGED, SioPlayersChanged(game=game).emit(), room=game.id, skip_sid=player.sid)
 
@@ -143,11 +144,14 @@ async def assign_roles(sid, data):
     """Handle the incoming request for assigning the roles to each player.
     """
     sess: SioSession = await sio.get_session(sid)
-    log.debug(f"Incoming request from {sess.player.user_name} ({sid}) to assign the roles to the players.")
+    log.debug(f"Incoming request from {sess.player.user_name} ({sid}) to assign the roles to the players "
+              f"of game {sess.game.id}.")
     assignment = SioRoleAssignment(roles=sess.game.assign_roles())
     log.debug(f"Assigned the following roles to each player:")
     for player, role in assignment.roles:
         log.debug(f"\t{player.user_name}: {role.name}")
+    log.debug(f"Notifying the players of game {sess.game.id} about their role assignment by "
+              f"emitting event '{ROLES_ASSIGNED}'.")
     # Notify all players about the roles.
     await sio.emit(ROLES_ASSIGNED, assignment.emit(), room=sess.game.id)
 
