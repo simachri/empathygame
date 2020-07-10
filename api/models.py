@@ -25,9 +25,18 @@ class Player(BaseModel):
             self.user_id = user_id
 
 
+class Role(BaseModel):
+    id: int
+    name: str
+    descr: str
+
+
 class Scenario(BaseModel):
     """A scenario that can be played as a game."""
     id: str
+    roles: List[Role] = [Role(id=1, name='Child with Asperger syndrome', descr='Lorem ipsum'),
+                         Role(id=2, name='Parents', descr='Lorem ipsum'),
+                         Role(id=3, name='Teacher', descr='Lorem ipsum')]
 
 
 class Game(BaseModel):
@@ -37,6 +46,7 @@ class Game(BaseModel):
     id: str
     pwd: str
     players: List[Player] = []
+    roles: Dict[Player, Role] = {}
 
     def join(self, player: Player, pwd: str) -> bool:
         """Returns True if the join was successful, otherwise false."""
@@ -44,6 +54,14 @@ class Game(BaseModel):
             return False
         self.players.append(player)
         return True
+
+    def assign_roles(self) -> Dict[Player, Role]:
+        """Randomly assign the roles of the scenario to the players.
+
+        If the scenario contains less roles than players, some roles are assigned multiple times."""
+        for player in self.players:
+            self.roles[player] = random.choice(self.scenario.roles)
+        return self.roles
 
 
 class GameController:
@@ -89,6 +107,26 @@ class SioNewGame(BaseModel):
                 'game_pwd': self.game.pwd,
                 'user_id': self.user_id,
                 'user_name': self.user_name}
+
+
+class SioSession(BaseModel):
+    """Session date of a socket connection."""
+    game: Game = None
+    player: Player = None
+
+
+class SioRoleAssignment(BaseModel):
+    roles: Dict[Player, Role] = None
+
+    def emit(self) -> Dict:
+        ret = {'assigned_roles': []}
+        for player, role in self.roles:
+            ret['assigned_roles'].append({'user_id': player.user_id,
+                                          'user_name': player.user_name,
+                                          'role_id': role.id,
+                                          'role_name': role.name,
+                                          'role_descr': role.descr})
+        return ret
 
 
 class SioJoinGame(BaseModel):

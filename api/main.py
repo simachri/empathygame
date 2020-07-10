@@ -5,8 +5,23 @@ import socketio
 import uvicorn
 from fastapi import FastAPI
 
-from events import CONN_SUCCESS, NEW_GAME, JOIN_GAME, JOIN_GAME_ERROR, GAME_JOINED, PLAYERS_CHANGED
-from models import Scenario, Player, SioNewGame, GameFactory, SioJoinGame, GameController, Game, SioPlayersChanged
+from events import CONN_SUCCESS, \
+    NEW_GAME, \
+    JOIN_GAME, \
+    JOIN_GAME_ERROR, \
+    GAME_JOINED, \
+    PLAYERS_CHANGED, \
+    ASSIGN_ROLES, \
+    ROLES_ASSIGNED
+from models import Scenario, \
+    Player, \
+    SioNewGame, \
+    GameFactory, \
+    SioJoinGame, \
+    GameController, \
+    Game, \
+    SioPlayersChanged, \
+    SioSession, SioRoleAssignment
 
 rest_api = FastAPI()
 # Socket.IO will be mounted as a sub application to the FastAPI main app.
@@ -43,7 +58,7 @@ async def connect(sid, environ):
     """
     log.debug(f"New connection request with SID {sid}.")
     log.debug(f"Creating new session.")
-    await sio.save_session(sid, {})
+    await sio.save_session(sid, SioSession())
     log.debug(f"Emitting event {CONN_SUCCESS} to {sid}.")
     await sio.emit(CONN_SUCCESS, room=sid)
 
@@ -65,8 +80,9 @@ async def new_game(sid, data: SioNewGame):
     game = GameFactory().create(Scenario(id=sio_data.game_scenario), player)
     game_controller.add(game)
     # Update the user session with the new game.
-    sess = await sio.get_session(sid)
-    sess['game_id'] = game.id
+    sess: SioSession = await sio.get_session(sid)
+    sess.game = game
+    sess.player = player
     await sio.save_session(sid, sess)
     log.debug(f"New game created with ID {game.id} and password {game.pwd}.")
     # Create a new socket IO room for the game.
@@ -97,8 +113,9 @@ async def join_game(sid, data: SioJoinGame):
         await sio.emit(JOIN_GAME_ERROR, room=sid)
         return
     # Update the user session.
-    sess = await sio.get_session(sid)
-    sess['game_id'] = game.id
+    sess: SioSession = await sio.get_session(sid)
+    sess.game = game
+    sess.player = player
     await sio.save_session(sid, sess)
     log.debug(f"{sid} successfully joined game {game.id}.")
     # Join the socket IO room for the game.
@@ -118,6 +135,21 @@ async def notify_player_joined(player: Player, game: Game):
     log.debug(f"Notifying the players of game {game.id} that a new player has joined.")
     # Do not send the event to the player herself/himself.
     await sio.emit(PLAYERS_CHANGED, SioPlayersChanged(game=game).emit(), room=game.id, skip_sid=player.sid)
+
+
+# noinspection PyUnusedLocal
+@sio.on(ASSIGN_ROLES)
+async def assign_roles(sid, data):
+    """Handle the incoming request for assigning the roles to each player.
+    """
+    sess: SioSession = await sio.get_session(sid)
+    log.debug(f"Incoming request from {sess.player.user_name} ({sid}) to assign the roles to the players.")
+    assignment = SioRoleAssignment(roles=sess.game.assign_roles())
+    log.debug(f"Assigned the following roles to each player:")
+    for player, role in assignment.roles:
+        log.debug(f"\t{player.user_name}: {role.name}")
+    # Notify all players about the roles.
+    await sio.emit(ROLES_ASSIGNED, assignment.emit(), room=sess.game.id)
 
 
 if __name__ == "__main__":
