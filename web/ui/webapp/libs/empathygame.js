@@ -14,6 +14,10 @@ class EmpathyGame {
     joinGame(gameId, gamePwd, userName, userId) {
         this.socket.emit('join_game', {"game_id": gameId, "game_pwd": gamePwd, "user_name": userName, "user_id": userId });
     }
+
+    assignRoles() {
+        this.socket.emit('assign_roles', {});
+    }
   }
   
   function getEmpathyGame(socket){

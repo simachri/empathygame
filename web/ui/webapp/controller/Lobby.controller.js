@@ -17,12 +17,13 @@ sap.ui.define([
 			
 			this.getView().setModel(new JSONModel({
 				isMobile: Device.browser.mobile,
-				players: waitingPlayers
-			}));
-
+				players: waitingPlayers,
+				rolesAssigned: false
+			}));		
 			
+			var eg = store.getProperty("/eg");
+
 			//--Update view if player are joining or leaving...
-			var eg = store.getProperty("/eg")
 			eg.getSocket().on('players_changed', data => {
 				MessageToast.show ("Players in lobby changed");
 				if(data !== null && data !== undefined){
@@ -31,7 +32,18 @@ sap.ui.define([
 						players: data.players
 					}));
 				}
-			});				
+			});	
+			//--Update view if roles are assigned
+			eg.getSocket().on('roles_assigned', data => {
+				MessageToast.show ("All roles assigned!");
+				if(data !== null && data !== undefined){
+					store.setProperty("/waitingPlayers", data.players);
+					this.getView().setModel(new JSONModel({						
+						players: data.players,
+						rolesAssigned: true
+					}));
+				}
+			});			
 		},
 
 		/**
@@ -42,66 +54,41 @@ sap.ui.define([
 			//--Check if we are logged in, otherwise route to login
 			//if(this.getView().getModel("store").getProperty("/gameId") === ""){
 			//	sap.ui.core.UIComponent.getRouterFor(this).navTo("router");
-			//}
-			
-
-					
-
+			//}		
 		}, 
 
 		onAfterRendering: function(){
 
-			
-			/*
-			const model = this.getView().getModel();
-			var players = model.getProperty("/players");
-			var newPlayers = (players !== null && players !== undefined) ? players.concat({	title: "newFoo"	}) : {	title: "newFoo2"	};
-			model.setProperty("/players", newPlayers);
-
-			const model2 = this.getView().getModel("store");
-			var players2 = model2.getProperty("/waitingPlayers");
-			var newPlayers2 = (players2 !== null && players2 !== undefined) ? players2.concat({	title: "newFoo"	}) : {	title: "newFoo2"	};
-			model2.setProperty("/waitingPlayers", newPlayers2);
-			*/
-
-
-		},
-
-		showData: function(){
-			var gameId =   this.getView().getModel("store").getProperty("/gameId");
-			var gamePwd =   this.getView().getModel("store").getProperty("/gamePwd");
 		},
 
 		/**
-		 * Socket.IO Connection Test
+		 * 
+		 * Copies the current link to clipboard
 		 */
-		connectAndCallWebSocket: function(){
+		copyLink: function(){
+			var textArea = document.createElement('textarea');
+			textArea.setAttribute('style','width:1px;border:0;opacity:0;');
+			document.body.appendChild(textArea);
+			textArea.value = this.getView().getModel("store").getProperty("/accessUrl");
+			textArea.select();
+			document.execCommand('copy');
+			document.body.removeChild(textArea);
+			MessageToast.show ("Game access URL copied to clipboard");
+		},
 
-			var that = this;
+		/**
+		 * Emit event to assign roles to all users
+		 */
+		assignRoles: function(){
+			var eg = this.getView().getModel("store").getProperty("/eg");
+			eg.assignRoles();
+		},
 
-			var socket = io.connect( {
-				'path': '/api/ws/socket.io'
-			  });
-
-			socket.on('connect', () => {
-			// either with send()
-			that.getView().getModel().setProperty("/webSocketText", "Connected");
-			socket.send('Hello!');
-
-			// or with emit() and custom event names
-			socket.emit('salutations', 'Hello!', { 'mr': 'john' }, Uint8Array.from([1, 2, 3, 4]));
-
-			});			
-
-			// handle the event sent with socket.send()
-			socket.on('my_response', data => {
-				that.getView().getModel().setProperty("/webSocketText", JSON.stringify(data));
-			});
-
-			// handle the event sent with socket.emit()
-			socket.on('greetings', (elem1, elem2, elem3) => {
-			console.log(elem1, elem2, elem3);
-			});
+		/**
+		 * Start the game
+		 */
+		startGame: function(){
+			MessageToast.show ("Starting the game... (Not yet implemented)");
 		},
 
 		/**
@@ -128,13 +115,6 @@ sap.ui.define([
 					MessageBox.error("Payload is null or undefined");
 				}     
 				}).always(function(res, textStatus, request) { that.addXcrfTokenHeader(request)});//--Add new updated X-CSRF-Token 
-		},
-
-		/**
-		 * Navigation
-		 */
-		navToLogin: function() {
-        	sap.ui.core.UIComponent.getRouterFor(this).navTo("login");
 		}
 
 	});

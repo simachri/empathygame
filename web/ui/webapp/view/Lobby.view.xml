@@ -13,6 +13,7 @@
                                 	<Text text="[Dev] User Id: {store>/userId}" />
                                 	<Text text="Game Id: {store>/gameId}" />
 									<Text text="Game Password: {store>/gamePwd}" />
+									<Button id="copyLink" icon="sap-icon://paste" text="Copy Link to Clipboard" press=".copyLink" />
 								</l:VerticalLayout >
 							</f:DynamicPageHeader>
 						</f:header>					
@@ -20,10 +21,10 @@
 						<f:content>
 							<List id="userList" items="{/players}">
 								<NotificationListItem
-									title="{user_name}"
-									description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+									title="{role_name}"
+									description="{role_descr}"
 									showCloseButton="false"
-									datetime="1 hour"
+									datetime=""
 									unread="true"
 									priority="None"
 									close="onItemClose"
@@ -37,6 +38,10 @@
 					</f:DynamicPage>
 				</content>					
 				<footer>
+					<OverflowToolbar>    
+                    		<Button id="assignRoles" icon="sap-icon://customer-and-contacts" text="Assign Roles" press=".assignRoles" visible="{= !${/rolesAssigned} }" type="Emphasized" class="sapUiMediumMarginBegin"/>
+							<Button id="startGame" icon="sap-icon://begin" text="Start Game" press=".startGame" visible="{= ${/rolesAssigned} }" type="Accept" class="sapUiMediumMarginBegin"/>
+					</OverflowToolbar>
 					<!--<OverflowToolbar>
 						<SegmentedButton selectedKey="all" class="sapMSegmentedButtonNoAutoWidth">
 							<items>

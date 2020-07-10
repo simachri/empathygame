@@ -29,6 +29,12 @@ sap.ui.define([
 			}));	
 
         },
+
+        createAccessUrl: function(gameId, gamePwd){
+			var accessUrl = location.protocol + '//' + location.host + location.pathname + `?game_id=${gameId}&game_pwd=${gamePwd}`;
+			this.getView().getModel("store").setProperty("/accessUrl", accessUrl);
+			return accessUrl;
+		},
         
         /**
          * 
@@ -70,6 +76,7 @@ sap.ui.define([
                 if(data !== null && data !== undefined){
                     that.getView().getModel("store").setProperty("/gameId", data.game_id);
                     that.getView().getModel("store").setProperty("/gamePwd", data.game_pwd);
+                    that.createAccessUrl(data.game_id, data.game_pwd);
                     //--Put yourself first as waiting players
                     var players = [{"user_name": data.user_name}];
                     that.getView().getModel("store").setProperty("/waitingPlayers", players);
