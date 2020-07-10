@@ -134,6 +134,7 @@ async def join_game(sid, data: SioJoinGame):
 
 async def notify_player_joined(player: Player, game: Game):
     """Emit an event 'players_changed" when a player joins a game."""
+    log.debug(f"Notifying the players of game {game.id} that a new player has joined.")
     # Do not send the event to the player herself/himself.
     await sio.emit(PLAYERS_CHANGED, SioPlayersChanged(game=game).emit(), room=game.id, skip_sid=player.sid)
 
