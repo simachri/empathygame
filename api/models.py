@@ -73,7 +73,7 @@ class GameFactory:
 
     def create(self, scenario: Scenario, host: Player) -> Game:
         """Create a new game instance with a random game ID and a random game password."""
-        return Game(scenario=scenario, host=host, id=self.generate_id(), pwd=self.generate_pwd())
+        return Game(scenario=scenario, host=host, id=self.generate_id(), pwd=self.generate_pwd(), players=[host])
 
 
 class SioNewGame(BaseModel):
