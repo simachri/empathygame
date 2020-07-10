@@ -19,6 +19,7 @@ modules:
     parameters:
       disk-quota: 256M
       memory: 256M
+      host: empathygame
  #   requires:
  #     - name: api
  #       group: destinations
