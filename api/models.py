@@ -3,12 +3,17 @@ from typing import Dict, Any, List
 
 from pydantic import BaseModel
 
+class Role(BaseModel):
+    id: int
+    name: str
+    descr: str
 
 class Player(BaseModel):
     """The socket IO connction ID."""
     sid: str
     user_id: str = None
     user_name: str
+    role: Role = None
 
     def __init__(self, sid: str, user_name: str, user_id: str = None, **data: Any):
         """Create a new player.
@@ -25,10 +30,7 @@ class Player(BaseModel):
             self.user_id = user_id
 
 
-class Role(BaseModel):
-    id: int
-    name: str
-    descr: str
+
 
 
 class Scenario(BaseModel):
@@ -46,7 +48,6 @@ class Game(BaseModel):
     id: str
     pwd: str
     players: List[Player] = []
-    roles: Dict[Player, Role] = {}
 
     def join(self, player: Player, pwd: str) -> bool:
         """Returns True if the join was successful, otherwise false."""
@@ -55,13 +56,13 @@ class Game(BaseModel):
         self.players.append(player)
         return True
 
-    def assign_roles(self) -> Dict[Player, Role]:
+    def assign_roles(self) -> List[Player]:
         """Randomly assign the roles of the scenario to the players.
 
         If the scenario contains less roles than players, some roles are assigned multiple times."""
-        for player in self.players:
-            self.roles[player] = random.choice(self.scenario.roles)
-        return self.roles
+        for i in range(len(self.players)):
+           self.players[i].role = random.choice(self.scenario.roles)
+        return self.players
 
 
 class GameController:
@@ -116,16 +117,16 @@ class SioSession(BaseModel):
 
 
 class SioRoleAssignment(BaseModel):
-    roles: Dict[Player, Role] = None
+    players: List[Player] = None
 
     def emit(self) -> Dict:
-        ret = {'assigned_roles': []}
-        for player, role in self.roles:
-            ret['assigned_roles'].append({'user_id': player.user_id,
+        ret = {'players': []}
+        for player in self.players:
+            ret['players'].append({'user_id': player.user_id,
                                           'user_name': player.user_name,
-                                          'role_id': role.id,
-                                          'role_name': role.name,
-                                          'role_descr': role.descr})
+                                          'role_id': player.role.id,
+                                          'role_name': player.role.name,
+                                          'role_descr': player.role.descr})
         return ret
 
 

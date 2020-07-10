@@ -146,14 +146,14 @@ async def assign_roles(sid, data):
     sess: SioSession = await sio.get_session(sid)
     log.debug(f"Incoming request from {sess.player.user_name} ({sid}) to assign the roles to the players "
               f"of game {sess.game.id}.")
-    assignment = SioRoleAssignment(roles=sess.game.assign_roles())
+    assignments = SioRoleAssignment(players=sess.game.assign_roles())
     log.debug(f"Assigned the following roles to each player:")
-    for player, role in assignment.roles:
-        log.debug(f"\t{player.user_name}: {role.name}")
+    for player in assignments.players:
+        log.debug(f"\t{player.user_name}: {player.role.name}")
     log.debug(f"Notifying the players of game {sess.game.id} about their role assignment by "
               f"emitting event '{ROLES_ASSIGNED}'.")
     # Notify all players about the roles.
-    await sio.emit(ROLES_ASSIGNED, assignment.emit(), room=sess.game.id)
+    await sio.emit(ROLES_ASSIGNED,  assignments.emit(), room=sess.game.id)
 
 
 if __name__ == "__main__":
