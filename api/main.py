@@ -88,6 +88,8 @@ async def new_game(sid, data: SioNewGame):
     sess['game_id'] = game.id
     await sio.save_session(sid, sess)
     log.debug(f"New game created with ID {game.id} and password {game.pwd}.")
+    # Create a new socket IO room for the game.
+    sio.enter_room(sid, game.id)
     # Emit the event that the game has been successfully created.
     sio_data.game = game
     sio_data.user_id = player.user_id
@@ -118,6 +120,8 @@ async def join_game(sid, data: SioJoinGame):
     sess['game_id'] = game.id
     await sio.save_session(sid, sess)
     log.debug(f"{sid} successfully joined game {game.id}.")
+    # Join the socket IO room for the game.
+    sio.enter_room(sid, game.id)
     # Emit the event that the game has been successfully joined.
     sio_data.game = game
     sio_data.user_name = player.user_name
