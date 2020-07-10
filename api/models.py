@@ -83,14 +83,6 @@ class SioNewGame(BaseModel):
     user_name: str = None
     game: Game = None
 
-    def __getitem__(self, item):
-        """Is required to work with python-socketio."""
-        return self.__root__[item]
-
-    def get(self, item):
-        """Provide the usual 'get' method of a dictionary."""
-        self.dict().get(item)
-
     def emit(self) -> Dict:
         """Create the dictionary for the emitting event."""
         return {'game_id': self.game.id,
@@ -106,14 +98,6 @@ class SioJoinGame(BaseModel):
     user_name: str = None
     game: Game = None
 
-    def __getitem__(self, item):
-        """Is required to work with python-socketio."""
-        return self.__root__[item]
-
-    def get(self, item):
-        """Provide the usual 'get' method of a dictionary."""
-        self.dict().get(item)
-
     def emit(self) -> Dict:
         """Create the dictionary for the emitting event."""
         ret = {'players': []}
@@ -124,14 +108,6 @@ class SioJoinGame(BaseModel):
 
 class SioPlayersChanged(BaseModel):
     game: Game
-
-    def __getitem__(self, item):
-        """Is required to work with python-socketio."""
-        return self.__root__[item]
-
-    def get(self, item):
-        """Provide the usual 'get' method of a dictionary."""
-        self.dict().get(item)
 
     def emit(self) -> Dict:
         """Create the dictionary for the emitting event."""
