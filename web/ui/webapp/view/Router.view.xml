@@ -2,7 +2,11 @@
 		<App id="app">
             <Page>
 				<customHeader>
-					<f:ShellBar title="{i18n>TITLE}" homeIcon="./img/logo_ui5.png" />
+					<f:ShellBar 
+						title="{i18n>TITLE}"
+					 	homeIcon="./img/logo_ui5.png" 
+						avatarPressed="onProfilePressed">					
+					</f:ShellBar> 
 				</customHeader>
 				<content>
 					<f:DynamicPage>
@@ -13,8 +17,9 @@
                                 justifyContent="Center">
                                 <items>
 									<l:VerticalLayout >
-										<Button id="navToCreateGame" icon="sap-icon://add-document" text="Create new EmpathyGame" press=".navToUserName('new')" width="300px" type="Accept"/>  
+										<Button id="navToCreateGame" icon="sap-icon://add-document" text="Create new EmpathyGame" press=".navToUserName('new')" width="300px" type="Accept" class="sapUiSmallMarginBottom"/>  
                                     	<Button id="navToLogin" icon="sap-icon://visits" text="Login to existing EmpathyGame" press=".navToUserName('login')" width="300px"/> 
+										<Button id="resumeGame" icon="sap-icon://forward" text="Resume" press=".accessGame" width="300px" visible="{= ${/gameOn} === true}" type="Emphasized" class="sapUiMediumMarginTop"/> 
 									</l:VerticalLayout >                             
                                 </items>
 							</FlexBox>

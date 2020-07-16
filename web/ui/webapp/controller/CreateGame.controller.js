@@ -34,6 +34,13 @@ sap.ui.define([
 			var accessUrl = location.protocol + '//' + location.host + location.pathname + `?game_id=${gameId}&game_pwd=${gamePwd}`;
 			this.getView().getModel("store").setProperty("/accessUrl", accessUrl);
 			return accessUrl;
+        },
+        
+        setLocalStorageGameInfo: function(store){
+			window.localStorage.setItem('empathygame.userId', store.getProperty('/userId'));
+			window.localStorage.setItem('empathygame.userName', store.getProperty('/userName'));
+			window.localStorage.setItem('empathygame.gameId', store.getProperty('/gameId'));
+			window.localStorage.setItem('empathygame.gamePwd', store.getProperty('/gamePwd'));
 		},
         
         /**
@@ -76,7 +83,10 @@ sap.ui.define([
                 if(data !== null && data !== undefined){
                     that.getView().getModel("store").setProperty("/gameId", data.game_id);
                     that.getView().getModel("store").setProperty("/gamePwd", data.game_pwd);
+                    that.getView().getModel("store").setProperty("/userId", data.user_id);
+                    that.getView().getModel("store").setProperty("/userName", data.user_name);
                     that.createAccessUrl(data.game_id, data.game_pwd);
+                    that.setLocalStorageGameInfo( that.getView().getModel("store"));
                     //--Put yourself first as waiting players
                     var players = [{"user_name": data.user_name}];
                     that.getView().getModel("store").setProperty("/waitingPlayers", players);
