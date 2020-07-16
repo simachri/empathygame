@@ -139,7 +139,11 @@ class SioJoinGame(BaseModel):
 
     def emit(self) -> Dict:
         """Create the dictionary for the emitting event."""
-        ret = {'players': []}
+        ret = {'players': [],
+               'game_id': self.game.id,
+               'game_pwd': self.game.pwd,
+               'user_id': self.user_id,
+               'user_name': self.user_name}
         for player in self.game.players:
             ret['players'].append({'user_id': player.user_id, 'user_name': player.user_name})
         return ret
