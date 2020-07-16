@@ -1,10 +1,9 @@
 # Local Application Start
 
 ## Start backend
+pipenv shell
 ### Set port
 $Env:PORT = "8080"
-#
-invoke-expression 'cmd /c start powershell -Command {pipenv shell}'
 ### Start API
 invoke-expression 'cmd /c start powershell -Command {write-host "Start empathygame api server"; py ./api/main.py }'
 

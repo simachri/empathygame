@@ -1,8 +1,0 @@
----
-applications:
-  - name: empathygame-api
-    host: empathygame-api
-    path: .
-    memory: 128M
-    command: python api/main.py
-    buildpack: https://github.com/cloudfoundry/buildpack-python.git
