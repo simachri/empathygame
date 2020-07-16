@@ -148,8 +148,8 @@ async def assign_roles(sid, data):
               f"of game {sess.game.id}.")
     assignments = SioRoleAssignment(players=sess.game.assign_roles())
     log.debug(f"Assigned the following roles to each player:")
-    for player in assignments.players:
-        log.debug(f"\t{player.user_name}: {player.role.name}")
+    for key in assignments.players:
+        log.debug(f"\t{assignments.players.get(key).user_name}: {assignments.players.get(key).role.name}")
     log.debug(f"Notifying the players of game {sess.game.id} about their role assignment by "
               f"emitting event '{ROLES_ASSIGNED}'.")
     # Notify all players about the roles.

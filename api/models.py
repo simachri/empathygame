@@ -47,21 +47,22 @@ class Game(BaseModel):
     host: Player
     id: str
     pwd: str
-    players: List[Player] = []
+    players: Dict[str, Player] = {}
 
     def join(self, player: Player, pwd: str) -> bool:
         """Returns True if the join was successful, otherwise false."""
         if pwd != self.pwd:
             return False
-        self.players.append(player)
+        if player.user_id not in self.players:
+            self.players[player.user_id] = player
         return True
 
-    def assign_roles(self) -> List[Player]:
+    def assign_roles(self) -> Dict[str, Player]:
         """Randomly assign the roles of the scenario to the players.
 
         If the scenario contains less roles than players, some roles are assigned multiple times."""
-        for i in range(len(self.players)):
-           self.players[i].role = random.choice(self.scenario.roles)
+        for key in self.players:
+           self.players.get(key, {}).role = random.choice(self.scenario.roles)
         return self.players
 
 
@@ -93,7 +94,7 @@ class GameFactory:
 
     def create(self, scenario: Scenario, host: Player) -> Game:
         """Create a new game instance with a random game ID and a random game password."""
-        return Game(scenario=scenario, host=host, id=self.generate_id(), pwd=self.generate_pwd(), players=[host])
+        return Game(scenario=scenario, host=host, id=self.generate_id(), pwd=self.generate_pwd(), players={host.user_id : host})
 
 
 class SioNewGame(BaseModel):
@@ -117,16 +118,16 @@ class SioSession(BaseModel):
 
 
 class SioRoleAssignment(BaseModel):
-    players: List[Player] = None
+    players: Dict[str, Player] = {}
 
     def emit(self) -> Dict:
         ret = {'players': []}
-        for player in self.players:
-            ret['players'].append({'user_id': player.user_id,
-                                          'user_name': player.user_name,
-                                          'role_id': player.role.id,
-                                          'role_name': player.role.name,
-                                          'role_descr': player.role.descr})
+        for key in self.players:
+            ret['players'].append({'user_id': self.players[key].user_id,
+                                          'user_name':  self.players[key].user_name,
+                                          'role_id':  self.players[key].role.id,
+                                          'role_name':  self.players[key].role.name,
+                                          'role_descr':  self.players[key].role.descr})
         return ret
 
 
@@ -144,8 +145,8 @@ class SioJoinGame(BaseModel):
                'game_pwd': self.game.pwd,
                'user_id': self.user_id,
                'user_name': self.user_name}
-        for player in self.game.players:
-            ret['players'].append({'user_id': player.user_id, 'user_name': player.user_name})
+        for key in self.game.players:
+            ret['players'].append({'user_id': self.game.players[key].user_id, 'user_name': self.game.players[key].user_name})
         return ret
 
 
@@ -155,6 +156,6 @@ class SioPlayersChanged(BaseModel):
     def emit(self) -> Dict:
         """Create the dictionary for the emitting event."""
         ret = {'players': []}
-        for player in self.game.players:
-            ret['players'].append({'user_id': player.user_id, 'user_name': player.user_name})
+        for key in self.game.players:
+            ret['players'].append({'user_id': self.game.players[key].user_id, 'user_name': self.game.players[key].user_name})
         return ret
