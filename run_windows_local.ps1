@@ -1,7 +1,7 @@
 # Local Application Start
 
 ## Start backend
-pipenv shell
+#pipenv shell
 ### Set port
 $Env:PORT = "8080"
 ### Start API
