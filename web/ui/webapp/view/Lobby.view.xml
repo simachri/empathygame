@@ -4,7 +4,7 @@
 				<customHeader>
 					<f:ShellBar 
 						title="{i18n>TITLE}"
-					 	homeIcon="./img/logo_ui5.png" 		
+					 	homeIcon="./img/logo.svg" 		
 					>				
 					</f:ShellBar> 
 				</customHeader>
