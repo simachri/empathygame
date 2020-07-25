@@ -115,6 +115,13 @@ sap.ui.define([
 					MessageBox.error("Payload is null or undefined");
 				}     
 				}).always(function(res, textStatus, request) { that.addXcrfTokenHeader(request)});//--Add new updated X-CSRF-Token 
+		},
+		
+		/**
+		 * Navigation
+		 */
+		 navToHome: function() {
+        	document.location.href="/";
 		}
 
 	});

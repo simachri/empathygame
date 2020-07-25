@@ -5,7 +5,7 @@
 					<f:ShellBar 
 						title="{i18n>TITLE}"
 					 	homeIcon="./img/logo.svg" 
-						avatarPressed="onProfilePressed">					
+						homeIconPressed="navToHome">					
 					</f:ShellBar> 
 				</customHeader>
 				<content>

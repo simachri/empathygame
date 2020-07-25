@@ -1,10 +1,11 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" xmlns:l="sap.ui.layout" controllerName="empathygame.controller.Lobby" displayBlock="true" height="100%">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:f="sap.f" xmlns:card="sap.f.cards" xmlns:l="sap.ui.layout" controllerName="empathygame.controller.Lobby" displayBlock="true" height="100%">
 		<App id="app">
             <Page>
 				<customHeader>
 					<f:ShellBar 
 						title="{i18n>TITLE}"
 					 	homeIcon="./img/logo.svg" 		
+					 	homeIconPressed="navToHome"
 					>				
 					</f:ShellBar> 
 				</customHeader>
@@ -18,11 +19,25 @@
                                 	<Text text="Game Id: {store>/gameId}" />
 									<Text text="Game Password: {store>/gamePwd}" />
 									<Button id="copyLink" icon="sap-icon://paste" text="Copy Link to Clipboard" press=".copyLink" />
+									<f:Card
+								class="sapUiMediumMarginTop"
+								width="100%">
+								<f:header>
+								<card:Header
+									title="School Inclusion"
+									subtitle="This game discusses if your child shall go to a normal or special school"
+									iconSrc="sap-icon://study-leave"
+									press="navToHome"/>
+								</f:header>
+						</f:Card>
 								</l:VerticalLayout >
 							</f:DynamicPageHeader>
 						</f:header>					
 
+						
 						<f:content>
+						
+							
 							<List id="userList" items="{/players}">
 								<NotificationListItem
 									title="{role_name}"

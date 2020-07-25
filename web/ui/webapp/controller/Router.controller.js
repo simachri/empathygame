@@ -191,6 +191,9 @@ sap.ui.define([
 		/**
 		 * Navigation
 		 */
+		 navToHome: function() {
+        	document.location.href="/";
+		},
 		navToUserName: function(source) {
 			this.getView().getModel("store").setProperty("/commingFrom", source);
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("userName");
