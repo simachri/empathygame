@@ -1,3 +1,4 @@
+-i https://pypi.org/simple/
 aiohttp==3.6.2
 async-timeout==3.0.1
 asynctest==0.13.0
@@ -10,18 +11,19 @@ fastapi==0.58.1
 furl==2.1.0
 h11==0.9.0
 hdbcli==2.5.86
-httptools==0.1.1
+httptools==0.1.1 ; sys_platform != 'win32' and sys_platform != 'cygwin' and platform_python_implementation != 'PyPy'
 idna==2.10
 multidict==4.7.6
 orderedmultidict==1.0.1
-pydantic==1.5.1
+pydantic==1.6.1
 python-engineio==3.13.1
 python-socketio==4.6.0
 requests==2.24.0
 six==1.15.0
 starlette==0.13.4
-urllib3==1.25.9
-uvicorn==0.11.5
-uvloop==0.14.0
+typing-extensions==3.7.4.2
+urllib3==1.25.10
+uvicorn==0.11.7
+uvloop==0.14.0 ; sys_platform != 'win32' and sys_platform != 'cygwin' and platform_python_implementation != 'PyPy'
 websockets==8.1
-yarl==1.4.2
+yarl==1.5.0
