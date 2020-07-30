@@ -38,4 +38,4 @@
 -   Both parents are performance-oriented, and Sophia wants to become a doctor just like her father​
 -   She is very serious for her age​
 -   Sophia parents make a lot of pressure on her to do very well in school
-> Written with [StackEdit](https://stackedit.io/).
+
