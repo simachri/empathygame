@@ -16,6 +16,7 @@ requests = "*"
 asynctest = "*"
 aiohttp = "*"
 async_timeout = "*"
+websocket-client = "*"
 
 [requires]
 python_version = "3.8"
