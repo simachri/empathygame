@@ -7,5 +7,3 @@ Depending on child’s needs and abilities, the child has one of the following o
 -   General special needs class​
 -   Specialized public autism class with some inclusions or mainstreaming​
 -   Specialized public autism class without inclusion or mainstreaming
-
-> Written with [StackEdit](https://stackedit.io/).
