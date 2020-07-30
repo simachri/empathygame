@@ -25,7 +25,7 @@ Test the latest running deployment: https://empathygame.cfapps.eu10.hana.ondeman
 
 ## API deployment
 
-1. **Note**: Only do this, if the GitHub repo here does not already contain a `requirements.txt`. Create a `requirements.txt` from the `Pipfile` through `pipenv run pip freeze > requirements.txt`.
+1. **Note**: Only do this, if the GitHub repo here does not already contain a `requirements.txt`. Create a `requirements.txt` from the `Pipfile` through pipenv lock --keep-outdated -d -r > requirements.txt`.
 2. Download all the requirements to a `vendor` folder through `pip download -d vendor -r requirements.txt --platform manylinux1_x86_64 --only-binary=:all:`
     **Note**: The `requirements.txt` above might contain unrequired dependencies that lead to errors when downloading. Those dependencies can be removed with no harm.
 3. Run `cf push` which uses the `manifest.yml`, `runtime.txt` and the `requirements.txt`.
