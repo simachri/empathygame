@@ -12,5 +12,3 @@ The answer, of course, is – it all depends! Some questions to consider as you 
 -   How Martin best communicate with others? (spoken /sign /visual / written language)?​
 -   Do changes in routine or transitions to new activities affect Martin’s behavior?​
 -   What types of things work best for your child in terms of rewards and motivation?
-
-> Written with [StackEdit](https://stackedit.io/).
