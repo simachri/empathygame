@@ -6,10 +6,9 @@ Autism ( autism spectrum disorder – ASD) is a lifelong developmental disorder 
 **Level 1 – High functioning​**
 -   people with Level 1 ASD may struggle in social situations and have some concerns with restrictive or repetitive behaviors but the only require minimal support to help them function in their day to day activities.​
 -   people with Level 1 ASD are likely to communicate verbally. They may be able to have some relationships. However, they may struggle maintaining a conversation and making or keeping friends may not come easily or naturally to them.​
--   people with Level 1 ASD prefer to stick to established routines and feel uncomfortable with changes or unexpected events. They may want to do certain things in their own way. ​
-> Written with [StackEdit](https://stackedit.io/).
+-   people with Level 1 ASD prefer to stick to established routines and feel uncomfortable with changes or unexpected events. They may want to do certain things in their own way. 
 
-**Level 2 – Moderate severe**
+​**Level 2 – Moderate severe**
 -   people with Level 2 ASD need more severe and they have more difficulty with social skills.​
 -   people with Level 2 ASD may or may not communicate verbally. If they do, their conversations may be very short or only specific topics or they may need extensive support in order to participate in social activities.​
 -   people with Level 1 ASD they may have routines or habits that they feel they must do and, if they get interrupted, they become very uncomfortable or upset.
