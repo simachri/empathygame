@@ -3,10 +3,12 @@ from typing import Dict, Any, List
 
 from pydantic import BaseModel
 
+
 class Role(BaseModel):
     id: int
     name: str
     descr: str
+
 
 class Player(BaseModel):
     """The socket IO connction ID."""
@@ -25,12 +27,9 @@ class Player(BaseModel):
         self.sid = sid
         self.user_name = user_name
         if self.user_id is None or self.user_id == "":
-            self.user_id = random.randint(100000, 999999)
+            self.user_id = str(random.randint(100000, 999999))
         else:
             self.user_id = user_id
-
-
-
 
 
 class Scenario(BaseModel):
@@ -62,7 +61,7 @@ class Game(BaseModel):
 
         If the scenario contains less roles than players, some roles are assigned multiple times."""
         for key in self.players:
-           self.players.get(key, {}).role = random.choice(self.scenario.roles)
+            self.players.get(key, {}).role = random.choice(self.scenario.roles)
         return self.players
 
 
@@ -82,19 +81,22 @@ class GameController:
 class GameFactory:
     """Create a new game instance with a random game ID and a random game password."""
 
-    # noinspection PyMethodMayBeStatic
-    def generate_id(self) -> str:
+    @staticmethod
+    def generate_id() -> int:
         """Generates a random 5 digit game ID."""
         return random.randint(10000, 99999)
 
-    # noinspection PyMethodMayBeStatic
-    def generate_pwd(self) -> str:
+    @staticmethod
+    def generate_pwd() -> int:
         """Generates a random 5 digit game password."""
         return random.randint(10000, 99999)
 
+    # Disable the inspection. We want the instance method for unit testing.
+    # noinspection PyMethodMayBeStatic
     def create(self, scenario: Scenario, host: Player) -> Game:
         """Create a new game instance with a random game ID and a random game password."""
-        return Game(scenario=scenario, host=host, id=self.generate_id(), pwd=self.generate_pwd(), players={host.user_id : host})
+        return Game(scenario=scenario, host=host, id=GameFactory.generate_id(), pwd=GameFactory.generate_pwd(),
+                    players={host.user_id: host})
 
 
 class SioNewGame(BaseModel):
@@ -124,10 +126,10 @@ class SioRoleAssignment(BaseModel):
         ret = {'players': []}
         for key in self.players:
             ret['players'].append({'user_id': self.players[key].user_id,
-                                          'user_name':  self.players[key].user_name,
-                                          'role_id':  self.players[key].role.id,
-                                          'role_name':  self.players[key].role.name,
-                                          'role_descr':  self.players[key].role.descr})
+                                   'user_name': self.players[key].user_name,
+                                   'role_id': self.players[key].role.id,
+                                   'role_name': self.players[key].role.name,
+                                   'role_descr': self.players[key].role.descr})
         return ret
 
 
@@ -146,7 +148,8 @@ class SioJoinGame(BaseModel):
                'user_id': self.user_id,
                'user_name': self.user_name}
         for key in self.game.players:
-            ret['players'].append({'user_id': self.game.players[key].user_id, 'user_name': self.game.players[key].user_name})
+            ret['players'].append(
+                    {'user_id': self.game.players[key].user_id, 'user_name': self.game.players[key].user_name})
         return ret
 
 
@@ -157,5 +160,6 @@ class SioPlayersChanged(BaseModel):
         """Create the dictionary for the emitting event."""
         ret = {'players': []}
         for key in self.game.players:
-            ret['players'].append({'user_id': self.game.players[key].user_id, 'user_name': self.game.players[key].user_name})
+            ret['players'].append(
+                    {'user_id': self.game.players[key].user_id, 'user_name': self.game.players[key].user_name})
         return ret
