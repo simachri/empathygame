@@ -29,6 +29,7 @@ Test the latest running deployment: https://empathygame.cfapps.eu10.hana.ondeman
 2. Download all the requirements to a `vendor` folder through `pip download -d vendor -r requirements.txt --platform manylinux1_x86_64 --only-binary=:all:`
     **Note**: The `requirements.txt` above might contain unrequired dependencies that lead to errors when downloading. Those dependencies can be removed with no harm.
 3. Run `cf push` which uses the `manifest.yml`, `runtime.txt` and the `requirements.txt`.
+**Note** `cf push` uploads all files from the directory where it is executed from. It inspects `.cfignore` for files that are excluded from uploading.
 
 ## UI deployment
 
