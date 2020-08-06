@@ -103,15 +103,17 @@ async def join_game(sid, data: SioJoinGame):
     sio_data = SioJoinGame.parse_obj(data)
     log.debug(f"Incoming request from {sio_data.user_name} ({sid}) to join game {sio_data.game_id}.")
     # Find the game for the provided ID and try to join it.
-    player = Player(sid, sio_data.user_name, sio_data.user_id)
     game = game_controller.get(sio_data.game_id)
-    if game is None:
-        await sio.emit(JOIN_GAME_ERROR, room=sid)
-        return
-    join_succeeded = game.join(player, sio_data.game_pwd)
-    if not join_succeeded:
-        await sio.emit(JOIN_GAME_ERROR, room=sid)
-        return
+    alread_joined, player = game.is_player(sid)
+    if not alread_joined:
+        player = Player(sid, sio_data.user_name, sio_data.user_id)
+        if game is None:
+            await sio.emit(JOIN_GAME_ERROR, room=sid)
+            return
+        join_succeeded = game.join(player, sio_data.game_pwd)
+        if not join_succeeded:
+            await sio.emit(JOIN_GAME_ERROR, room=sid)
+            return
     # Update the user session.
     sess: SioSession = await sio.get_session(sid)
     sess.game = game
@@ -153,7 +155,7 @@ async def assign_roles(sid, data):
     log.debug(f"Notifying the players of game {sess.game.id} about their role assignment by "
               f"emitting event '{ROLES_ASSIGNED}'.")
     # Notify all players about the roles.
-    await sio.emit(ROLES_ASSIGNED,  assignments.emit(), room=sess.game.id)
+    await sio.emit(ROLES_ASSIGNED, assignments.emit(), room=sess.game.id)
 
 
 if __name__ == "__main__":

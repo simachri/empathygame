@@ -47,6 +47,8 @@ class Game(BaseModel):
     id: str
     pwd: str
     players: Dict[str, Player] = {}
+    """The players of the game. The map has format User ID -> Player object instance."""
+    roles_assigned: bool = False
 
     def join(self, player: Player, pwd: str) -> bool:
         """Returns True if the join was successful, otherwise false."""
@@ -62,7 +64,19 @@ class Game(BaseModel):
         If the scenario contains less roles than players, some roles are assigned multiple times."""
         for key in self.players:
             self.players.get(key, {}).role = random.choice(self.scenario.roles)
+        self.roles_assigned = True
         return self.players
+
+    def is_player(self, sid: str) -> (bool, Player):
+        """Checks if the player for the provided SocketIO connection ID has already joined the game.
+        :param sid: SocketIO connection ID of the player.
+        :return: True if the player for the given SocketIO connection ID has joined the game, false otherwise.
+        If 'True': Also returns the player object instance, otherwise None.
+        """
+        for p in self.players.values():
+            if p.sid == sid:
+                return True, p
+        return False, None
 
 
 class GameController:
@@ -148,8 +162,13 @@ class SioJoinGame(BaseModel):
                'user_id': self.user_id,
                'user_name': self.user_name}
         for key in self.game.players:
-            ret['players'].append(
-                    {'user_id': self.game.players[key].user_id, 'user_name': self.game.players[key].user_name})
+            player: Player = self.game.players[key]
+            data = {'user_id': player.user_id, 'user_name': player.user_name}
+            if self.game.roles_assigned:
+                data['role_id'] = player.role.id
+                data['role_name'] = player.role.name
+                data['role_descr'] = player.role.descr
+            ret['players'].append(data)
         return ret
 
 
