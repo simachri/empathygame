@@ -29,13 +29,13 @@ API (REST)—>UI: { payload }
 {
   "id": integer,
   "titel": string,
-  "description": "<markdown string>",
+  "descr": "<markdown string>",
   "background_info": "<markdown string>",
   "decision_options": Array[
      {
        "id": integer,
        "titel": string,
-       "description": "<markdown string>"
+       "descr": "<markdown string>"
      }
    ],
   "personas": Array[
@@ -43,7 +43,7 @@ API (REST)—>UI: { payload }
         "id": integer, 
         "name": string,
         "mandatory": boolean,
-        "description": "<markdown string>"
+        "descr": "<markdown string>"
     }
   ]
 }
