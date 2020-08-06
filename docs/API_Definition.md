@@ -69,7 +69,7 @@ API (REST)—>UI: { payload }
 UI->API (REST): /games/school-inclusion/personas/teacher
 Note right of Backend: Backend reads DB
 API (REST)—>UI: { payload }
-​```
+```
 
 **Payload**
 ```json
