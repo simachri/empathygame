@@ -16,13 +16,15 @@ The static content of the application like the scenario description is transferr
 ```
 
 **Sequence Diagram**
+
 ```sequence
 UI->API (REST): /scenario/1
 Note right of Backend: Backend reads DB
 API (REST)—>UI: { payload }
-​```
+```
 
 **Payload - current implementation**
+
 ```json
 {
   id: “1”,
@@ -34,6 +36,7 @@ API (REST)—>UI: { payload }
 ``` 
 
 **Payload - future consideration**
+
 ```json
 {
   id: “1”,
