@@ -27,11 +27,11 @@ API (REST)—>UI: { payload }
 
 ```json
 {
-  id: “1”,
-  titel: "School inclusion",
-  description: "<markdown string>",
-  background_info: "<markdown string>",
-  decision_question: "<markdown string>"
+  "id": "1",
+  "titel": "School inclusion",
+  "description": "<markdown string>",
+  "background_info": "<markdown string>",
+  "decision_question": "<markdown string>"
 }
 ``` 
 
@@ -39,21 +39,21 @@ API (REST)—>UI: { payload }
 
 ```json
 {
-  id: “1”,
-  descr: "School inclusion",
-  data: {
-    Name: “School Inclusion”,
-    Description: “...”,
+  "id": "1",
+  "descr": "School inclusion",
+  "data": {
+    "Name": "School Inclusion",
+    "Description": "...",
     ...,
-    Personas: [
+    "Personas": [
       {
-        Id: “teacher”,
-        Name: “Teacher”,
-        Description: “...”
+        "Id": "teacher",
+        "Name": "Teacher",
+        "Description": "..."
       },
-        Id: “parent”,
-        Name: “Parent”,
-        Description: “...”
+        "Id": "parent",
+        "Name": "Parent",
+        "Description": “...”
       }
     ]
   }
