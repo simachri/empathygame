@@ -21,7 +21,7 @@ from models import Scenario, \
     GameController, \
     Game, \
     SioPlayersChanged, \
-    SioSession, SioRoleAssignment
+    SioSession, SioRoleAssignment, PersonaComposition, Persona, DecisionOption
 
 rest_api = FastAPI()
 # Socket.IO will be mounted as a sub application to the FastAPI main app.
@@ -42,9 +42,39 @@ log.setLevel(logging.DEBUG)
 game_controller = GameController()
 
 
-@rest_api.get("/hello")
-async def root():
-    return {"message": "Hello World"}
+@rest_api.get("/scenario/{scenario_id}")
+async def get_scenario(scenario_id: int) -> Scenario:
+    return Scenario(id=scenario_id,
+                    titel='Asperger Syndrome: School inclusion',
+                    descr='**The scenario**\n\nMartin is an 10 year old boy with a level 2 Asperger Syndrome, ' +
+                          'a type of autism.\nThe ethical decision is about whether Martin shall attend a ' +
+                          'regular school ' +
+                          'with an inclusion concept or a special school.',
+                    background_info='**Asperger syndrome - general information**\n\n' +
+                                    'Asperger syndrome (AS) is a milder autism spectrum disorder. AS is a lifelong ' +
+                                    'developmental disorder that includes differences or challenges in social ' +
+                                    'communication skills, fine and gross motor skills, speech, and intellectual ' +
+                                    'ability. The severity of autism is categorized as\n' +
+                                    '* 1 - high–functioning,\n' +
+                                    '* 2 – moderately severe and\n' +
+                                    '* 3 – severe',
+                    decision_options=[DecisionOption(id='1',
+                                                     titel='What is the best choice for Martin?',
+                                                     descr='Shall Martin attend a regular school with ' +
+                                                           'inclusion concept or a special school?')],
+                    personas=PersonaComposition(
+                            mandatory=[Persona(id=1, name='Martin, child with Asperger syndrome',
+                                               descr='Martin is 10 years old with level 2 AS.'),
+                                       Persona(id=2, name='Martin\'s parents',
+                                               descr='- The family has modest income, only the father is employed\n' +
+                                                     '- Financial problems are associated with Martin\'s medical and ' +
+                                                     'therapy expensed.'),
+                                       Persona(id=3, name='Helen - teacher',
+                                               descr='- She is perceived as patient, persistent and grateful.\n' +
+                                                     '- She is a good communicator, creative and inventing method to ' +
+                                                     'help a child master the skills required by the curriculum ' +
+                                                     'plan.')])
+                    )
 
 
 # noinspection PyUnusedLocal

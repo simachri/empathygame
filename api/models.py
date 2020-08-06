@@ -4,7 +4,7 @@ from typing import Dict, Any, List
 from pydantic import BaseModel
 
 
-class Role(BaseModel):
+class Persona(BaseModel):
     id: int
     name: str
     descr: str
@@ -15,7 +15,7 @@ class Player(BaseModel):
     sid: str
     user_id: str = None
     user_name: str
-    role: Role = None
+    role: Persona = None
 
     def __init__(self, sid: str, user_name: str, user_id: str = None, **data: Any):
         """Create a new player.
@@ -32,12 +32,68 @@ class Player(BaseModel):
             self.user_id = user_id
 
 
+class PersonaComposition(BaseModel):
+    """A composition of personas defining which personas are mandatory and which ones are optional."""
+    mandatory: List[Persona] = []
+    """List of mandatory personas"""
+    optional: List[Persona] = []
+    """List of optional personas"""
+
+    def all(self) -> List[Persona]:
+        """Returns the union of all mandatory and optional personas."""
+        return self.mandatory + self.optional
+
+    def dict(self, *, include=None,
+             exclude=None, by_alias=False,
+             skip_defaults: bool = None, exclude_unset: bool = False, exclude_defaults: bool = False,
+             exclude_none: bool = False) -> list:
+        original = super().dict(include=include, exclude=exclude, by_alias=by_alias, skip_defaults=skip_defaults,
+                                exclude_unset=exclude_unset, exclude_defaults=exclude_defaults,
+                                exclude_none=exclude_none)
+        result = []
+        for _ in original['mandatory']:
+            _['mandatory'] = True
+            result.append(_)
+        for _ in original['optional']:
+            _['mandatory'] = False
+            result.append(_)
+        return result
+
+
+class DecisionOption(BaseModel):
+    """Decision options of a scenario."""
+    id: str
+    titel: str = ''
+    descr: str = ''
+
+
 class Scenario(BaseModel):
     """A scenario that can be played as a game."""
     id: str
-    roles: List[Role] = [Role(id=1, name='Child with Asperger syndrome', descr='Lorem ipsum'),
-                         Role(id=2, name='Parents', descr='Lorem ipsum'),
-                         Role(id=3, name='Teacher', descr='Lorem ipsum')]
+    titel: str = ''
+    descr: str = ''
+    background_info: str = ''
+    decision_options: List[DecisionOption] = []
+    personas: PersonaComposition = PersonaComposition(
+            mandatory=[Persona(id=1, name='Martin, child with Asperger syndrome',
+                               descr='Martin is 10 years old with level 2 AS.'),
+                       Persona(id=2, name='Martin\'s parents',
+                               descr='- The family has modest income, only the father is employed\n' +
+                                     '- Financial problems are associated with Martin\'s medical and ' +
+                                     'therapy expensed.'),
+                       Persona(id=3, name='Helen - teacher',
+                               descr='- She is perceived as patient, persistent and grateful.\n' +
+                                     '- She is a good communicator, creative and inventing method to ' +
+                                     'help a child master the skills required by the curriculum ' +
+                                     'plan.')])
+
+
+class MarkdownScenarioLoader:
+    """Loads the data for a scenario from local markdown files."""
+
+    @staticmethod
+    def load(scenario_id: str) -> Scenario:
+        pass
 
 
 class Game(BaseModel):
@@ -63,7 +119,7 @@ class Game(BaseModel):
 
         If the scenario contains less roles than players, some roles are assigned multiple times."""
         for key in self.players:
-            self.players.get(key, {}).role = random.choice(self.scenario.roles)
+            self.players.get(key, {}).role = random.choice(self.scenario.personas.all())
         self.roles_assigned = True
         return self.players
 
