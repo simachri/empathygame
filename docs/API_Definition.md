@@ -8,7 +8,7 @@ In the following, the UI - Backend Interface is described. On the one hand the g
 ## Static information - REST API
 The static content of the application like the scenario description is transferred via simple REST API. In the following all endpoints are defined.
 
-### GET scenario general information
+### GET scenario and personas data
 
 **Endpoint**
 ```
@@ -25,13 +25,27 @@ API (REST)—>UI: { payload }
 
 **Payload - current implementation**
 
-```json
+```
 {
-  "id": "1",
-  "titel": "School inclusion",
+  "id": integer,
+  "titel": string,
   "description": "<markdown string>",
   "background_info": "<markdown string>",
-  "decision_question": "<markdown string>"
+  "decision_options": Array[
+     {
+       "id": integer,
+       "titel": string,
+       "description": "<markdown string>"
+     }
+   ],
+  "personas": Array[
+    {
+        "id": integer, 
+        "name": string,
+        "mandatory": boolean,
+        "description": "<markdown string>"
+    }
+  ]
 }
 ``` 
 
