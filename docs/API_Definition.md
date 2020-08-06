@@ -6,27 +6,39 @@ In the following, the UI - Backend Interface is described. On the one hand the g
 > js-sequence is included in typora.
 
 ## Static information - REST API
-The static content of the application like the game description is transferred via simple REST API. In the following all endpoints are defined.
+The static content of the application like the scenario description is transferred via simple REST API. In the following all endpoints are defined.
 
-### GET game general information
+### GET scenario general information
 
 **Endpoint**
 ```
-/games/{id}
+/scenario/{id}
 ```
 
 **Sequence Diagram**
 ```sequence
-UI->API (REST): /games/school-inclusion
+UI->API (REST): /scenario/1
 Note right of Backend: Backend reads DB
 API (REST)—>UI: { payload }
 ​```
 
-**Payload**
+**Payload - current implementation**
 ```json
 {
-  Id: “school-inclusion”,
-  Data: {
+  id: “1”,
+  titel: "School inclusion",
+  description: "<markdown string>",
+  background_info: "<markdown string>",
+  decision_question: "<markdown string>"
+}
+``` 
+
+**Payload - future consideration**
+```json
+{
+  id: “1”,
+  descr: "School inclusion",
+  data: {
     Name: “School Inclusion”,
     Description: “...”,
     ...,
